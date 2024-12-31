@@ -11,6 +11,7 @@ import RestEasy from "./model/RestEasy";
 import HomePage from './view/pages/Home';
 import LoginPage from "./view/pages/Login";
 import CreateAccountPage from "./view/pages/CreateAccount";
+import SearchFriendPage from "./view/pages/SearchFriend";
 
 // // @ts-ignore
 // import { createTransition, SlideLeft } from 'react-native-transition';
@@ -32,7 +33,8 @@ const Stack = createNativeStackNavigator({
     screens: {
         HomePage,
         LoginPage,
-        CreateAccountPage
+        CreateAccountPage,
+        SearchFriendPage
     }
 });
 

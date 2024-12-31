@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/core';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Keychain from 'react-native-keychain';
 import {FG_SECONDARY} from '../Colors';
+import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
 
 const POLL_INTERVAL_MILLIS = 10_000;
 export default function Home () {
@@ -61,7 +62,11 @@ export default function Home () {
 
     return (
         <View>
-            <NavBar backButton={false} />
+            <NavBar
+                backButton={false}
+                iconRight={BiPersonAdd}
+                actionRight={() => navigation.navigate ('SearchFriendPage')}
+            />
             <ScrollView style={styles.main}>
                 <TimeSelect valueRef={selectedTimeRef} />
                 <Button text="Send" onClick={sendBeacon} isPrimary={true} style={{marginTop: 8}} />

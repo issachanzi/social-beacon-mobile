@@ -1,21 +1,40 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {BG_PRIMARY, FG_PRIMARY} from '../Colors';
+import {Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {BG_PRIMARY, FG_PRIMARY, FG_SECONDARY} from '../Colors';
+import BiChevronLeft from 'react-native-bootstrap-icons/icons/chevron-left'
+import {useNavigation} from '@react-navigation/core';
 
 
-export default function NavBar ({ title = 'Social Beacon' }) {
+export default function NavBar ({
+    title = 'Social Beacon',
+    backButton = true,
+    iconLeft = () => <></>,
+    actionLeft = () => undefined,
+    iconRight = () => <></>,
+    actionRight = () => undefined
+}) {
+    const navigation = useNavigation();
+
+    if (backButton) {
+        iconLeft = BiChevronLeft;
+        actionLeft = () => navigation.goBack();
+    }
+
+    const IconLeft = iconLeft;
+    const IconRight = iconRight;
+
     return (
         <View style={styles.NavBar}>
-            <View style={styles.leftSlot}>
-
-            </View>
+            <TouchableOpacity style={styles.slot} onPress={actionLeft}>
+                <IconLeft viewBox="0 0 16 16" width="24" height="24" fill={FG_SECONDARY} />
+            </TouchableOpacity>
             <Text style={styles.title}>
                 {title}
             </Text>
             <View style={styles.spacer}/>
-            <View style={styles.rightSlot} >
-
-            </View>
+            <TouchableOpacity style={styles.slot} onPress={actionRight} >
+                <IconRight viewBox="0 0 16 16" width="24" height="24" fill={FG_SECONDARY} />
+            </TouchableOpacity>
         </View>
     );
 }
@@ -40,6 +59,11 @@ const styles = StyleSheet.create({
         lineHeight: 24,
     },
 
+    slot: {
+        width: 56,
+        height: 56,
+        padding: 16
+    }
 
 
 });
