@@ -56,10 +56,10 @@ export default class RestEasy {
             options.body = JSON.stringify (body);
         }
 
-        let response = await fetch (url, options);
+        let response = await fetch(url, options);
 
         if (response.ok) {
-            return response.json ();
+            return response.json();
         }
         else {
             throw response.status;
