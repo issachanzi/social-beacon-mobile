@@ -13,7 +13,7 @@ export default class Login {
     }
 
     static async all () {
-        return Login.where ({});
+        return Login.where (undefined);
     }
 
     static async byId (id) {
@@ -50,6 +50,10 @@ export default class Login {
             await RestEasy.instance.put ('Login', this.id, obj);
         }
     }
+
+    async destroy () {
+        return RestEasy.instance.destroy ('Login', this.id);
+    }
     
     #user_id;
     #user_memo;
@@ -85,5 +89,6 @@ export default class Login {
         }
     }
     
+
 }
 

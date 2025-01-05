@@ -1,5 +1,5 @@
 <?php
-    $schema_json = file_get_contents ('../../../schema.json');
+    $schema_json = file_get_contents ('./schema.json');
     $schema = json_decode ($schema_json);
 
     foreach ($schema as $className => $classSchema) {
