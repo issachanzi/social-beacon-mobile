@@ -15,11 +15,11 @@ export default class RestEasy {
     async get (modelName, id, query) {
         let url = this.apiBaseUrl + modelName;
         const queryString = new URLSearchParams (query).toString();
-        if (id != undefined) {
+        if (id !== undefined) {
             url += '/' + id;
         }
-        if (query != undefined) {
-            url += queryString;
+        if (query !== undefined) {
+            url += '?' + queryString;
         }
 
         return this.sendRequest (url, 'GET');
@@ -37,10 +37,16 @@ export default class RestEasy {
         return this.sendRequest (url, 'PUT', body);
     }
 
-    async delete (modelName, id) {
+    async destroy (modelName, id) {
         let url = this.apiBaseUrl + modelName + '/' + id;
 
         return this.sendRequest (url, 'DELETE');
+    }
+
+    async customMethod (modelName, id, methodName, body) {
+        let url = this.apiBaseUrl + modelName + '/' + id + '/' + methodName;
+
+        return this.sendRequest (url, 'POST', body);
     }
 
     async sendRequest (url, method, body) {

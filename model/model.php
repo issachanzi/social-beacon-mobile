@@ -1,7 +1,9 @@
 <?php
     $className = $argv [1];
-    $associations_json = stream_get_contents (STDIN);
-    $associations = json_decode ($associations_json);
+    $schema_json = stream_get_contents (STDIN);
+    $schema = json_decode ($schema_json);
+
+    $associations = $schema->fields;
 
     $imports = array ();
     foreach ($associations as $ass) {
@@ -37,7 +39,7 @@ export default class <?php echo $className; ?> {
     }
 
     static async all () {
-        return <?php echo $className; ?>.where ({});
+        return <?php echo $className; ?>.where (undefined);
     }
 
     static async byId (id) {
@@ -86,6 +88,10 @@ export default class <?php echo $className; ?> {
             await RestEasy.instance.put ('<?php echo $className; ?>', this.id, obj);
         }
     }
+
+    async destroy () {
+        return RestEasy.instance.destroy ('<?php echo $className ?>', this.id);
+    }
     <?php
         foreach ($associations as $ass) {
             if ($ass->isAssociation) {
@@ -130,6 +136,33 @@ export default class <?php echo $className; ?> {
             }
         }
     ?>
+
+<?php foreach ($schema->methods as $methodName => $params) { ?>
+<?php $paramsString = implode (",\n        ", array_keys (get_object_vars ($params))); ?>
+    <?php echo $methodName; ?> (<?php echo $paramsString; ?>) {
+        const obj = {
+<?php
+                foreach ($params as $param) {
+                    if ($param->isAssociation) {
+?>
+            <?php echo $param->name; ?> : <?php echo $param->name; ?> !== null && <?php echo $param->name; ?> !== undefined ? this.<?php echo $param->name; ?>.id : undefined,
+<?php
+                    }
+                    else if ($param->isDate) { ?>
+            <?php echo $param->name; ?> : <?php echo $param->name; ?> !== undefined && <?php echo $param->name; ?> !== null ? <?php echo $param->name; ?>.getTime () : undefined,
+<?php
+                    }
+                    else { ?>
+            <?php echo $param->name; ?> : <?php echo $param->name; ?>,
+<?php
+                    }
+                }
+            ?>
+        };
+
+        return RestEasy.instance.customMethod ('<?php echo $className; ?>', this.id, obj);
+    }
+<?php } ?>
 
 }
 

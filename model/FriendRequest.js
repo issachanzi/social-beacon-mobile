@@ -11,7 +11,7 @@ export default class FriendRequest {
     }
 
     static async all () {
-        return FriendRequest.where ({});
+        return FriendRequest.where (undefined);
     }
 
     static async byId (id) {
@@ -45,6 +45,10 @@ export default class FriendRequest {
         else {
             await RestEasy.instance.put ('FriendRequest', this.id, obj);
         }
+    }
+
+    async destroy () {
+        return RestEasy.instance.destroy ('FriendRequest', this.id);
     }
     
     #from_id;
@@ -115,5 +119,12 @@ export default class FriendRequest {
         }
     }
     
+    accept () {
+        const obj = {
+        };
+
+        return RestEasy.instance.customMethod ('FriendRequest', this.id, obj);
+    }
+
 }
 

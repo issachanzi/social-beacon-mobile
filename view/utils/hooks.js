@@ -1,12 +1,12 @@
 import React from "react";
 
-export function usePromise (promise, defaultValue = null) {
+export function usePromise (promise, defaultValue = null, deps = []) {
     const [state, setState] = React.useState(defaultValue);
     React.useEffect(() => {
         if (promise !== undefined && promise !== null) {
-            promise.then(setState);
+            promise.then (setState);
         }
-    }, [promise])
+    }, deps)
 
     return state;
 }
@@ -31,5 +31,11 @@ export function usePoll (pollFunction, pollIntervalMillis) {
     }, [shouldPollAgain, pollFunction, pollIntervalMillis]);
 
     return cachedResult;
+}
+
+export function useRefresh () {
+    const [state, setState] = React.useState(0);
+
+    return () => setState(n => n + 1);
 }
 

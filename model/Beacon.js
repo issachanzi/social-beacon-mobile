@@ -14,7 +14,7 @@ export default class Beacon {
     }
 
     static async all () {
-        return Beacon.where ({});
+        return Beacon.where (undefined);
     }
 
     static async byId (id) {
@@ -48,6 +48,10 @@ export default class Beacon {
         else {
             await RestEasy.instance.put ('Beacon', this.id, obj);
         }
+    }
+
+    async destroy () {
+        return RestEasy.instance.destroy ('Beacon', this.id);
     }
     
     #sender_id;
@@ -84,5 +88,6 @@ export default class Beacon {
         }
     }
     
+
 }
 
