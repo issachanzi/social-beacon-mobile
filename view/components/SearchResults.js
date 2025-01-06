@@ -1,9 +1,35 @@
 import {FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {BG_PRIMARY, BG_SECONDARY, FG_PRIMARY, FG_SECONDARY} from '../Colors';
-import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
+import BiPersonPlus from 'react-native-bootstrap-icons/icons/person-plus';
+import BiPersonPlusFill from 'react-native-bootstrap-icons/icons/person-plus-fill';
+import {usePromise, useRefresh} from '../utils/hooks';
+import Keychain from 'react-native-keychain';
+import User from '../../model/User';
+import FriendRequest from '../../model/FriendRequest';
 
 export default function SearchResults({ results = [], isQueryEmpty = false}) {
+    const credentials = usePromise(Keychain.getGenericPassword (), {});
+    const currentUserId = credentials.username;
+    const currentUser = usePromise (
+        User.byId (currentUserId),
+        {},
+        [currentUserId]
+    );
+    console.log ("Current user: " + JSON.stringify(currentUser));
+    const [friendRequestsSent, setFriendRequestsSent] = React.useState([]);
+    React.useEffect(() => {(async () => {
+        const friendRequests = (await FriendRequest.all ())
+            .filter (fr => fr.from.id === currentUserId);
+        const result = {};
+
+        friendRequests.forEach (fr => {
+            result [fr.to.id] = true;
+        });
+
+        setFriendRequestsSent (result);
+    }) (); }, [currentUserId])
+
     if (isQueryEmpty) {
         return (
             <Text style={styles.minorText}>
@@ -19,6 +45,45 @@ export default function SearchResults({ results = [], isQueryEmpty = false}) {
         );
     }
     else {
+        const handleSendFriendRequest = user => {
+            const friendRequest = new FriendRequest({
+                from: currentUser.id,
+                to: user.id
+            });
+
+            friendRequest.save ()
+                .then (noOp => {});
+
+            setFriendRequestsSent (oldValue => {
+                const newValue = {...oldValue};
+
+                newValue [user.id] = true;
+
+                return newValue;
+            });
+        };
+
+        const handleDeleteFriendRequest = user => {
+            FriendRequest.where ({
+                from: currentUser.id,
+                to: user.id
+            }).then(friendRequests => {
+                friendRequests.forEach (
+                    fr => {
+                        fr.destroy ()
+                    }
+                );
+            });
+
+            setFriendRequestsSent (oldValue => {
+                const newValue = {...oldValue};
+
+                newValue [user.id] = false;
+
+                return newValue;
+            });
+        }
+
         return (
             <FlatList
                 data={results}
@@ -35,15 +100,32 @@ export default function SearchResults({ results = [], isQueryEmpty = false}) {
                             </Text>
                         </View>
                         <View style={styles.spacer} />
-                        <TouchableOpacity>
-                            <BiPersonAdd
-                                viewBox="0 0 16 16"
-                                width={32}
-                                height={32}
-                                style={styles.addIcon}
-                                fill={FG_PRIMARY}
-                            />
-                        </TouchableOpacity>
+
+                            {
+                                friendRequestsSent [item.id] ?
+                                <TouchableOpacity onPress={
+                                    () => handleDeleteFriendRequest (item)
+                                }>
+                                    <BiPersonPlusFill
+                                        viewBox="0 0 16 16"
+                                        width={32}
+                                        height={32}
+                                        style={styles.addIcon}
+                                        fill={FG_PRIMARY}
+                                    />
+                                </TouchableOpacity> :
+                                <TouchableOpacity onPress={
+                                    () => handleSendFriendRequest (item)
+                                }>
+                                    <BiPersonPlus
+                                        viewBox="0 0 16 16"
+                                        width={32}
+                                        height={32}
+                                        style={styles.addIcon}
+                                        fill={FG_PRIMARY}
+                                    />
+                                </TouchableOpacity>
+                            }
                     </View>
                 )}
                 keyExtractor={item => item.id}
@@ -116,5 +198,5 @@ const styles = StyleSheet.create({
     spacer: {
         flex: 1
     }
-})
+});
 

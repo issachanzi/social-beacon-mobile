@@ -60,7 +60,8 @@ export default function CreateAccountPage () {
             .then(async login => {
                 RestEasy.instance.authorization = login.token;
                 await Keychain.setGenericPassword((await login.user).id, login.token);
-                navigation.navigate ('HomePage');
+                navigation.goBack ();
+                navigation.replace ('HomePage');
             })
             .catch(err => {
                 if (err === 404) {
@@ -68,6 +69,9 @@ export default function CreateAccountPage () {
                 }
                 else if (err === 403) {
                     Alert.alert ("Invalid password");
+                }
+                else if (err === 409) {
+                    Alert.alert ("That username is already taken. Please choose a different one");
                 }
                 else {
                     Alert.alert ('Unknown error while logging in');

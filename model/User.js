@@ -5,17 +5,14 @@ export default class User {
         if (data !== undefined) {
             this.password = data.password;
             this.displayName = data.displayName;
-            this.PASSWORD_HASH_MEMORY = data.PASSWORD_HASH_MEMORY;
             this.id = data.id;
-            this.PASSWORD_HASH_ITERATIONS = data.PASSWORD_HASH_ITERATIONS;
-            this.PASSWORD_HASH_PARALLELISM = data.PASSWORD_HASH_PARALLELISM;
             this.friends = data.friends;
             this.username = data.username;
         }
     }
 
     static async all () {
-        return User.where ({});
+        return User.where (undefined);
     }
 
     static async byId (id) {
@@ -36,10 +33,7 @@ export default class User {
         const obj = {
             password : this.password,
             displayName : this.displayName,
-            PASSWORD_HASH_MEMORY : this.PASSWORD_HASH_MEMORY,
             id : this.id,
-            PASSWORD_HASH_ITERATIONS : this.PASSWORD_HASH_ITERATIONS,
-            PASSWORD_HASH_PARALLELISM : this.PASSWORD_HASH_PARALLELISM,
             friends : this.friends,
             username : this.username,
         };
@@ -55,6 +49,11 @@ export default class User {
             await RestEasy.instance.put ('User', this.id, obj);
         }
     }
+
+    async destroy () {
+        return RestEasy.instance.destroy ('User', this.id);
+    }
     
+
 }
 
