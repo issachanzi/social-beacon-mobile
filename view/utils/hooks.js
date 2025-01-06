@@ -4,16 +4,23 @@ export function usePromise (promise, defaultValue = null, deps = []) {
     const [state, setState] = React.useState(defaultValue);
     React.useEffect(() => {
         if (promise !== undefined && promise !== null) {
-            promise.then (setState);
+            promise.then (setState).catch (err => {
+                console.log (err);
+            });
         }
     }, deps)
 
     return state;
 }
 
-export function usePoll (pollFunction, pollIntervalMillis) {
-    const [cachedResult, setCachedResult] = React.useState();
-    const [shouldPollAgain, setShouldPollAgain] = React.useState(true);
+export function usePoll (
+    pollFunction,
+    pollIntervalMillis,
+    defaultValue = null,
+    deps = []
+) {
+    const [cachedResult, setCachedResult] = React.useState(defaultValue);
+    const [shouldPollAgain, setShouldPollAgain] = React.useState(false);
 
     React.useEffect(() => {
         if (shouldPollAgain) {
@@ -29,6 +36,10 @@ export function usePoll (pollFunction, pollIntervalMillis) {
             }
         }
     }, [shouldPollAgain, pollFunction, pollIntervalMillis]);
+
+    React.useEffect (() => {
+        setShouldPollAgain (true);
+    }, deps);
 
     return cachedResult;
 }

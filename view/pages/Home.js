@@ -13,34 +13,59 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Keychain from 'react-native-keychain';
 import {FG_SECONDARY} from '../Colors';
 import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
+import FriendRequestCard from '../components/FriendRequestCard';
+import FriendRequest from '../../model/FriendRequest';
 
-const POLL_INTERVAL_MILLIS = 10_000;
+const BEACONS_POLL_INTERVAL_MILLIS = 10_000;
+const FRIEND_REQUESTS_POLL_INTERVAL_MILLIS = 10_000;
+
 export default function Home () {
 
     const navigation = useNavigation ();
     const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
-    const beaconsPromise = usePoll (Beacon.all, POLL_INTERVAL_MILLIS);
-    const beacons = usePromise(beaconsPromise, []);
+    const beaconsPromise = usePoll (
+        Beacon.all, BEACONS_POLL_INTERVAL_MILLIS,
+        new Promise(resolve => resolve ([])),
+        []
+    );
+    const beacons = usePromise(beaconsPromise, [], [beaconsPromise]);
 
     const selectedTimeRef = React.useRef(Date.now());
 
-    // const currentUser = localStorage.getItem('currentUser');
+    // const currentUserId = localStorage.getItem('currentUserId');
     const credentials = usePromise (Keychain.getGenericPassword ());
-    const currentUser = credentials !== null ? credentials.username : null;
+    const currentUserId = credentials !== null ? credentials.username : null;
     React.useEffect (() => {
         if (credentials === false) {
-            navigation.navigate ('LoginPage');
+            navigation.replace ('LoginPage');
         }
         else if (credentials !== null) {
             RestEasy.instance.authorization = credentials.password;
         }
     }, [credentials]);
 
+    const friendRequestsPromise = usePoll(
+        () => FriendRequest.where ({to: currentUserId}),
+        FRIEND_REQUESTS_POLL_INTERVAL_MILLIS,
+        new Promise(resolve => resolve ([])),
+        [currentUserId]
+    );
+    const friendRequests = usePromise(
+        friendRequestsPromise,
+        [],
+        [friendRequestsPromise]
+    );
+    // const friendRequests = [new FriendRequest ({
+    //     from: currentUserId,
+    //     to: currentUserId,
+    //     id: currentUserId}
+    // )];
+
     const sendBeacon = formData => {
         setIsBeaconActive (true);
         const beacon = new Beacon ({
-            sender: currentUser,
+            sender: currentUserId,
             timestamp: selectedTimeRef.current
         });
         beacon.save ().catch(err => setIsBeaconActive(false));
@@ -49,7 +74,7 @@ export default function Home () {
     let beaconCards;
     if (beacons.length === 0) {
         beaconCards = (
-            <Text style={[styles.text, {marginTop: 16}]}>
+            <Text style={[styles.text, {marginTop: 8}]}>
                 None of your friends have a beacon active right now. Maybe you should send one yourself...
             </Text>
         );
@@ -71,6 +96,9 @@ export default function Home () {
                 <TimeSelect valueRef={selectedTimeRef} />
                 <Button text="Send" onClick={sendBeacon} isPrimary={true} style={{marginTop: 8}} />
                 <View style={{marginTop: 8}}>
+                    {friendRequests.map (
+                        fr => <FriendRequestCard friendRequest={fr} key={fr.id} />
+                    )}
                     {beaconCards}
                 </View>
             </ScrollView>

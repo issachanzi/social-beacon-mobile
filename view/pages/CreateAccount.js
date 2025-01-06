@@ -60,7 +60,8 @@ export default function CreateAccountPage () {
             .then(async login => {
                 RestEasy.instance.authorization = login.token;
                 await Keychain.setGenericPassword((await login.user).id, login.token);
-                navigation.navigate ('HomePage');
+                navigation.goBack ();
+                navigation.replace ('HomePage');
             })
             .catch(err => {
                 if (err === 404) {

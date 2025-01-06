@@ -160,7 +160,7 @@ export default class <?php echo $className; ?> {
             ?>
         };
 
-        return RestEasy.instance.customMethod ('<?php echo $className; ?>', this.id, obj);
+        return RestEasy.instance.customMethod ('<?php echo $className; ?>', this.id, '<?php echo $methodName ?>', obj);
     }
 <?php } ?>
 

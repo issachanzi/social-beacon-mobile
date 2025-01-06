@@ -123,7 +123,7 @@ export default class FriendRequest {
         const obj = {
         };
 
-        return RestEasy.instance.customMethod ('FriendRequest', this.id, obj);
+        return RestEasy.instance.customMethod ('FriendRequest', this.id, 'accept', obj);
     }
 
 }

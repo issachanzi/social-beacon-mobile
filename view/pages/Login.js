@@ -34,7 +34,7 @@ export default function LoginPage () {
             .then(async () => {
                 RestEasy.instance.authorization = login.token;
                 await Keychain.setGenericPassword((await login.user).id, login.token);
-                navigation.navigate (-1);
+                navigation.replace ('HomePage');
             })
             .catch(err => {
                 if (err === 404) {
