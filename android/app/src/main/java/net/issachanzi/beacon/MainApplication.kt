@@ -1,4 +1,4 @@
-package com.socialbeaconandroid
+package net.issachanzi.beacon
 
 import android.app.Application
 import com.facebook.react.PackageList
