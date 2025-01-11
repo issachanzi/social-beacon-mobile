@@ -3,11 +3,7 @@ import notifee, { AndroidImportance } from '@notifee/react-native';
 import {PermissionsAndroid, Platform} from 'react-native';
 
 export function setup () {
-    initChannels()
-        .then(() => token ())
-        .then(t => {
-        console.log ('Firebase token:' + t);
-    }).catch(err => console.log(err));
+    initChannels().then();
 }
 
 export async function token () {
