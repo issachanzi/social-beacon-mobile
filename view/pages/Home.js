@@ -63,6 +63,7 @@ export default function Home () {
     // )];
 
     const sendBeacon = formData => {
+        console.log ("Selected time ref: " + selectedTimeRef.current.toString ());
         setIsBeaconActive (true);
         const beacon = new Beacon ({
             sender: currentUserId,
