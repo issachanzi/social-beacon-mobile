@@ -1,8 +1,11 @@
 import messaging from '@react-native-firebase/messaging';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import {PermissionsAndroid, Platform} from 'react-native';
 
 export function setup () {
-    token ().then(t => {
+    initChannels()
+        .then(() => token ())
+        .then(t => {
         console.log ('Firebase token:' + t);
     }).catch(err => console.log(err));
 }
@@ -17,6 +20,14 @@ export async function token () {
     }
 
     return await messaging ().getToken();
+}
+
+async function initChannels () {
+    await notifee.createChannel({
+        id: 'beacon',
+        name: 'Beacons from your friends',
+        importance: AndroidImportance.HIGH
+    });
 }
 
 
