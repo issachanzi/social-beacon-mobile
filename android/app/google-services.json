@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084404260258:android:a4754a02b19957624466fb",
+        "mobilesdk_app_id": "1:1084404260258:android:50b347f0142d8ca74466fb",
         "android_client_info": {
-          "package_name": "net.issachanzi.beacon.android"
+          "package_name": "net.issachanzi.beacon"
         }
       },
       "oauth_client": [],

@@ -1,15 +1,22 @@
-import firebase from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
+import {PermissionsAndroid, Platform} from 'react-native';
 
 export function setup () {
-    (async () => {
-
-    }) ();
+    token ().then(t => {
+        console.log ('Firebase token:' + t);
+    }).catch(err => console.log(err));
 }
 
 export async function token () {
-    const messaging = firebase.messaging ();
+    await messaging ().requestPermission();
 
+    if (Platform.OS === 'android') {
+        await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        );
+    }
 
+    return await messaging ().getToken();
 }
 
 
