@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1084404260258",
+    "project_id": "social-beacon-9102b",
+    "storage_bucket": "social-beacon-9102b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084404260258:android:50b347f0142d8ca74466fb",
+        "android_client_info": {
+          "package_name": "net.issachanzi.beacon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRBrYPkjs7WcidPednVXzuJPNfcj0yQhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

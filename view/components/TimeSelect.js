@@ -12,6 +12,12 @@ export default function TimeSelect({ valueRef }) {
     const [ value, setValue ] = React.useState (null);
     valueRef.current = value !== null ? value : new Date ();
 
+    React.useEffect(() => {
+        valueRef.current = value;
+
+        valueRef.current && console.log ("valueRef: " + valueRef.current.toString ());
+    }, [value]);
+
     const incrementValue = () => {
         setValue (value => {
             if (value === null || value.getTime() <= Date.now()) {

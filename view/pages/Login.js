@@ -7,6 +7,7 @@ import RestEasy from '../../model/RestEasy';
 import Login from '../../model/Login';
 import Keychain from 'react-native-keychain';
 import {useNavigation} from '@react-navigation/core';
+import {processLogin} from '../utils/login';
 
 export default function LoginPage () {
     const navigation = useNavigation();
@@ -32,8 +33,7 @@ export default function LoginPage () {
         login
             .save()
             .then(async () => {
-                RestEasy.instance.authorization = login.token;
-                await Keychain.setGenericPassword((await login.user).id, login.token);
+                await processLogin (login);
                 navigation.replace ('HomePage');
             })
             .catch(err => {
@@ -44,6 +44,7 @@ export default function LoginPage () {
                     Alert.alert ("Invalid password");
                 }
                 else {
+                    console.log (err);
                     Alert.alert ('Unknown error while logging in');
                 }
             })
