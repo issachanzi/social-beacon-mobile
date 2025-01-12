@@ -3,11 +3,38 @@ import {absoluteTime, relativeTime} from "../utils/timeFormat";
 import {usePromise} from "../utils/hooks";
 
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import BiHeart from 'react-native-bootstrap-icons/icons/heart'
+import BiHeart from 'react-native-bootstrap-icons/icons/heart';
+import BiHeartFill from 'react-native-bootstrap-icons/icons/heart-fill';
 import {BG_PRIMARY, BG_SECONDARY, FG_PRIMARY} from '../Colors';
+import BeaconResponse from '../../model/BeaconResponse';
 
-export default function BeaconCard ({ beacon, style }) {
+export default function BeaconCard ({ beacon, currentUser, style }) {
     const sender = usePromise (beacon.sender);
+
+    const [responses, setResponses] = React.useState ([]);
+    const isResponded = responses.length !== 0;
+
+    React.useEffect(() => {
+        BeaconResponse.where ({beacon: beacon.id}).then (setResponses);
+    }, []);
+
+    const toggleResponse = () => {
+        if (isResponded) {
+            responses.forEach (response => response.destroy ());
+
+            setResponses([]);
+        }
+        else {
+            const response = new BeaconResponse ({
+                beacon: beacon,
+                user: currentUser
+            });
+
+            response.save ().then ();
+
+            setResponses([response]);
+        }
+    }
 
     if (sender == null) {
         return <></>;
@@ -28,14 +55,24 @@ export default function BeaconCard ({ beacon, style }) {
                 </Text>
             </View>
             <View style={styles.spacer} />
-            <Pressable style={styles.heart}>
-                <BiHeart
-                    viewBox="0, 0, 16, 16"
-                    width={24}
-                    height={24}
-                    style={styles.icon}
-                    fill={FG_PRIMARY}
-                />
+            <Pressable style={styles.heart} onPress={toggleResponse}>
+                {
+                    isResponded ?
+                    <BiHeartFill
+                        viewBox="0, 0, 16, 16"
+                        width={24}
+                        height={24}
+                        style={styles.icon}
+                        fill={FG_PRIMARY}
+                    /> :
+                    <BiHeart
+                        viewBox="0, 0, 16, 16"
+                        width={24}
+                        height={24}
+                        style={styles.icon}
+                        fill={FG_PRIMARY}
+                    />
+                }
             </Pressable>
         </View>
     );
