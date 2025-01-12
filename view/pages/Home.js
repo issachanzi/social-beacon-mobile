@@ -32,11 +32,15 @@ export default function Home () {
     );
     const beacons = usePromise(beaconsPromise, [], [beaconsPromise]);
 
+    const [activeBeacon, setActiveBeacon] = React.useState(null);
+    const isActiveBeacon = activeBeacon !== null;
+
     const selectedTimeRef = React.useRef(Date.now());
 
     // const currentUserId = localStorage.getItem('currentUserId');
+
     const credentials = usePromise (Keychain.getGenericPassword ());
-    const currentUserId = credentials !== null ? credentials.username : null;
+    const [currentUserId, setCurrentUserId] = React.useState (null);
     const currentUser = usePromise(
         User.byId(currentUserId),
         null,
@@ -48,9 +52,19 @@ export default function Home () {
             navigation.replace ('LoginPage');
         }
         else if (credentials !== null) {
+            setCurrentUserId (credentials.username);
             RestEasy.instance.authorization = credentials.password;
         }
     }, [credentials]);
+
+    React.useEffect(() => {
+        Beacon.where ({sender: currentUserId}).then (b => {
+            if (b.length > 0) {
+                const activeBeacon = b[0];
+                setActiveBeacon (activeBeacon);
+            }
+        })
+    }, [currentUserId]);
 
     const friendRequestsPromise = usePoll(
         () => FriendRequest.where ({to: currentUserId}),
@@ -105,7 +119,16 @@ export default function Home () {
                 actionRight={() => navigation.navigate ('SearchFriendPage')}
             />
             <ScrollView style={styles.main}>
-                <TimeSelect valueRef={selectedTimeRef} />
+                <TimeSelect
+                    valueRef={selectedTimeRef}
+                    disabled={isActiveBeacon}
+                    highlight={isActiveBeacon}
+                    initialValue={
+                        activeBeacon !== null ?
+                        activeBeacon.timestamp :
+                        undefined
+                    }
+                />
                 <Button text="Send" onClick={sendBeacon} isPrimary={true} style={{marginTop: 8}} />
                 <View style={{marginTop: 8}}>
                     {friendRequests.map (
