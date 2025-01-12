@@ -4,6 +4,7 @@ export default class User {
     constructor (data) {
         if (data !== undefined) {
             this.password = data.password;
+            this.notificationDevices = data.notificationDevices;
             this.displayName = data.displayName;
             this.id = data.id;
             this.friends = data.friends;
@@ -32,6 +33,7 @@ export default class User {
     async save () {
         const obj = {
             password : this.password,
+            notificationDevices : this.notificationDevices,
             displayName : this.displayName,
             id : this.id,
             friends : this.friends,

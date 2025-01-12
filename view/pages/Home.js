@@ -15,6 +15,7 @@ import {FG_SECONDARY} from '../Colors';
 import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
 import FriendRequestCard from '../components/FriendRequestCard';
 import FriendRequest from '../../model/FriendRequest';
+import User from '../../model/User';
 
 const BEACONS_POLL_INTERVAL_MILLIS = 10_000;
 const FRIEND_REQUESTS_POLL_INTERVAL_MILLIS = 10_000;
@@ -36,6 +37,12 @@ export default function Home () {
     // const currentUserId = localStorage.getItem('currentUserId');
     const credentials = usePromise (Keychain.getGenericPassword ());
     const currentUserId = credentials !== null ? credentials.username : null;
+    const currentUser = usePromise(
+        User.byId(currentUserId),
+        null,
+        [currentUserId]
+    );
+
     React.useEffect (() => {
         if (credentials === false) {
             navigation.replace ('LoginPage');
@@ -82,7 +89,11 @@ export default function Home () {
     }
     else {
         beaconCards = beacons.map (beacon => (
-            <BeaconCard beacon={beacon} key={beacon.id} />
+            <BeaconCard
+                beacon={beacon}
+                currentUser={currentUser}
+                key={beacon.id}
+            />
         ))
     }
 

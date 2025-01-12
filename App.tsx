@@ -43,8 +43,8 @@ const Navigation = createStaticNavigation (Stack);
 
 
 export default function App(): React.JSX.Element {
-    RestEasy.init('http://192.168.1.219:7070/api');
-    // RestEasy.init ('http://192.168.87.99:7070/api');
+    //RestEasy.init('http://192.168.1.219:7070/api');
+    RestEasy.init ('http://192.168.8.118:7070/api');
 
     React.useEffect (() => {
         push.setup ();
