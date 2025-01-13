@@ -83,8 +83,15 @@ export default function Home () {
     //     id: currentUserId}
     // )];
 
+    const cancelBeacon = () => {
+        activeBeacon.destroy ();
+
+        selectedTimeRef.current = new Date ();
+
+        setActiveBeacon (null);
+    }
+
     const sendBeacon = formData => {
-        console.log ("Selected time ref: " + selectedTimeRef.current.toString ());
         const beacon = new Beacon ({
             sender: currentUserId,
             timestamp: selectedTimeRef.current.getTime()
@@ -130,7 +137,13 @@ export default function Home () {
                         undefined
                     }
                 />
-                <Button text="Send" onClick={sendBeacon} isPrimary={true} style={{marginTop: 8}} />
+                <Button
+                    text={isActiveBeacon ? 'Cancel Beacon' : 'Send Beacon'}
+                    onClick={isActiveBeacon ? cancelBeacon : sendBeacon}
+                    highlight={isActiveBeacon}
+                    isPrimary={true}
+                    style={{marginTop: 8}}
+                />
                 <View style={{marginTop: 8}}>
                     {friendRequests.map (
                         fr => <FriendRequestCard friendRequest={fr} key={fr.id} />

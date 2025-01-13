@@ -23,7 +23,9 @@ export default function TimeSelect({
     }, [value]);
 
     React.useEffect(() => {
-        setValue (initialValue);
+        if (initialValue !== null) {
+            setValue(initialValue);
+        }
     }, [initialValue]);
 
     const incrementValue = () => {
