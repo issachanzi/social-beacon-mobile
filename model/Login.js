@@ -54,7 +54,7 @@ export default class Login {
     async destroy () {
         return RestEasy.instance.destroy ('Login', this.id);
     }
-    
+        
     #user_id;
     #user_memo;
 

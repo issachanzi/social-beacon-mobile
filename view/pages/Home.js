@@ -23,7 +23,6 @@ const FRIEND_REQUESTS_POLL_INTERVAL_MILLIS = 10_000;
 export default function Home () {
 
     const navigation = useNavigation ();
-    const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
     const beaconsPromise = usePoll (
         Beacon.all, BEACONS_POLL_INTERVAL_MILLIS,
@@ -32,11 +31,15 @@ export default function Home () {
     );
     const beacons = usePromise(beaconsPromise, [], [beaconsPromise]);
 
-    const selectedTimeRef = React.useRef(Date.now());
+    const [activeBeacon, setActiveBeacon] = React.useState(null);
+    const isActiveBeacon = activeBeacon !== null;
+
+    const selectedTimeRef = React.useRef(new Date());
 
     // const currentUserId = localStorage.getItem('currentUserId');
+
     const credentials = usePromise (Keychain.getGenericPassword ());
-    const currentUserId = credentials !== null ? credentials.username : null;
+    const [currentUserId, setCurrentUserId] = React.useState (null);
     const currentUser = usePromise(
         User.byId(currentUserId),
         null,
@@ -48,9 +51,20 @@ export default function Home () {
             navigation.replace ('LoginPage');
         }
         else if (credentials !== null) {
+            setCurrentUserId (credentials.username);
             RestEasy.instance.authorization = credentials.password;
         }
     }, [credentials]);
+
+    React.useEffect(() => {
+        Beacon.where ({sender: currentUserId}).then (b => {
+            if (b.length > 0) {
+                const activeBeacon = b[0];
+
+                setActiveBeacon (activeBeacon);
+            }
+        })
+    }, [currentUserId]);
 
     const friendRequestsPromise = usePoll(
         () => FriendRequest.where ({to: currentUserId}),
@@ -71,12 +85,13 @@ export default function Home () {
 
     const sendBeacon = formData => {
         console.log ("Selected time ref: " + selectedTimeRef.current.toString ());
-        setIsBeaconActive (true);
         const beacon = new Beacon ({
             sender: currentUserId,
-            timestamp: selectedTimeRef.current
+            timestamp: selectedTimeRef.current.getTime()
         });
-        beacon.save ().catch(err => setIsBeaconActive(false));
+        beacon.save ().then ();
+
+        setActiveBeacon (beacon);
     };
 
     let beaconCards;
@@ -105,7 +120,16 @@ export default function Home () {
                 actionRight={() => navigation.navigate ('SearchFriendPage')}
             />
             <ScrollView style={styles.main}>
-                <TimeSelect valueRef={selectedTimeRef} />
+                <TimeSelect
+                    valueRef={selectedTimeRef}
+                    disabled={isActiveBeacon}
+                    highlight={isActiveBeacon}
+                    initialValue={
+                        activeBeacon !== null ?
+                        activeBeacon.timestamp :
+                        undefined
+                    }
+                />
                 <Button text="Send" onClick={sendBeacon} isPrimary={true} style={{marginTop: 8}} />
                 <View style={{marginTop: 8}}>
                     {friendRequests.map (
