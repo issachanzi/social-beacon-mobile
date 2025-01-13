@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {useState} from 'react';
 import {BG_PRIMARY, BG_SECONDARY, BG_SYSTEM, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
-import DropShadow from 'react-native-drop-shadow';
 
 export default function Button ({
         text,
