@@ -50,7 +50,7 @@ export default class FriendRequest {
     async destroy () {
         return RestEasy.instance.destroy ('FriendRequest', this.id);
     }
-    
+        
     #from_id;
     #from_memo;
 

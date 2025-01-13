@@ -51,7 +51,7 @@ export default class BeaconResponse {
     async destroy () {
         return RestEasy.instance.destroy ('BeaconResponse', this.id);
     }
-    
+        
     #beacon_id;
     #beacon_memo;
 

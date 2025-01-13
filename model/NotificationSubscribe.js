@@ -50,7 +50,7 @@ export default class NotificationSubscribe {
     async destroy () {
         return RestEasy.instance.destroy ('NotificationSubscribe', this.id);
     }
-    
+        
     #user_id;
     #user_memo;
 

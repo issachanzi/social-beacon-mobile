@@ -23,7 +23,6 @@ const FRIEND_REQUESTS_POLL_INTERVAL_MILLIS = 10_000;
 export default function Home () {
 
     const navigation = useNavigation ();
-    const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
     const beaconsPromise = usePoll (
         Beacon.all, BEACONS_POLL_INTERVAL_MILLIS,
@@ -35,7 +34,7 @@ export default function Home () {
     const [activeBeacon, setActiveBeacon] = React.useState(null);
     const isActiveBeacon = activeBeacon !== null;
 
-    const selectedTimeRef = React.useRef(Date.now());
+    const selectedTimeRef = React.useRef(new Date());
 
     // const currentUserId = localStorage.getItem('currentUserId');
 
@@ -61,6 +60,7 @@ export default function Home () {
         Beacon.where ({sender: currentUserId}).then (b => {
             if (b.length > 0) {
                 const activeBeacon = b[0];
+
                 setActiveBeacon (activeBeacon);
             }
         })
@@ -85,12 +85,13 @@ export default function Home () {
 
     const sendBeacon = formData => {
         console.log ("Selected time ref: " + selectedTimeRef.current.toString ());
-        setIsBeaconActive (true);
         const beacon = new Beacon ({
             sender: currentUserId,
-            timestamp: selectedTimeRef.current
+            timestamp: selectedTimeRef.current.getTime()
         });
-        beacon.save ().catch(err => setIsBeaconActive(false));
+        beacon.save ().then ();
+
+        setActiveBeacon (beacon);
     };
 
     let beaconCards;

@@ -54,6 +54,22 @@ export default class Beacon {
         return RestEasy.instance.destroy ('Beacon', this.id);
     }
     
+    #timestamp;
+
+    set timestamp (value) {
+        if (value.getTime !== undefined) {
+            this.#timestamp = value;
+        }
+        else {
+            this.#timestamp = new Date ();
+            this.#timestamp.setTime (value);
+        }
+    }
+
+    get timestamp () {
+        return this.#timestamp;
+    }
+            
     #sender_id;
     #sender_memo;
 
