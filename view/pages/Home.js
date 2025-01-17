@@ -15,39 +15,62 @@ import {FG_SECONDARY} from '../Colors';
 import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
 import FriendRequestCard from '../components/FriendRequestCard';
 import FriendRequest from '../../model/FriendRequest';
+import User from '../../model/User';
+import BeaconResponse from '../../model/BeaconResponse';
+import BeaconResponseCard from '../components/BeaconResponseCard';
+import AnimatedViewCollection from '../components/AnimatedViewCollection';
 
-const BEACONS_POLL_INTERVAL_MILLIS = 10_000;
-const FRIEND_REQUESTS_POLL_INTERVAL_MILLIS = 10_000;
+const POLL_INTERVAL_MILLIS = 10_000;
 
 export default function Home () {
 
     const navigation = useNavigation ();
-    const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
     const beaconsPromise = usePoll (
-        Beacon.all, BEACONS_POLL_INTERVAL_MILLIS,
+        Beacon.all, POLL_INTERVAL_MILLIS,
         new Promise(resolve => resolve ([])),
         []
     );
     const beacons = usePromise(beaconsPromise, [], [beaconsPromise]);
 
-    const selectedTimeRef = React.useRef(Date.now());
+    const [activeBeacon, setActiveBeacon] = React.useState(null);
+    const isActiveBeacon = activeBeacon !== null;
+
+    const selectedTimeRef = React.useRef(new Date());
 
     // const currentUserId = localStorage.getItem('currentUserId');
+
     const credentials = usePromise (Keychain.getGenericPassword ());
-    const currentUserId = credentials !== null ? credentials.username : null;
+    const [currentUserId, setCurrentUserId] = React.useState (null);
+    const currentUser = usePromise(
+        User.byId(currentUserId),
+        null,
+        [currentUserId]
+    );
+
     React.useEffect (() => {
         if (credentials === false) {
             navigation.replace ('LoginPage');
         }
         else if (credentials !== null) {
+            setCurrentUserId (credentials.username);
             RestEasy.instance.authorization = credentials.password;
         }
     }, [credentials]);
 
+    React.useEffect(() => {
+        Beacon.where ({sender: currentUserId}).then (b => {
+            if (b.length > 0) {
+                const activeBeacon = b[0];
+
+                setActiveBeacon (activeBeacon);
+            }
+        })
+    }, [currentUserId]);
+
     const friendRequestsPromise = usePoll(
         () => FriendRequest.where ({to: currentUserId}),
-        FRIEND_REQUESTS_POLL_INTERVAL_MILLIS,
+        POLL_INTERVAL_MILLIS,
         new Promise(resolve => resolve ([])),
         [currentUserId]
     );
@@ -56,34 +79,72 @@ export default function Home () {
         [],
         [friendRequestsPromise]
     );
-    // const friendRequests = [new FriendRequest ({
-    //     from: currentUserId,
-    //     to: currentUserId,
-    //     id: currentUserId}
-    // )];
 
-    const sendBeacon = formData => {
-        setIsBeaconActive (true);
+    const responsesPromise = usePoll (
+        async () => {
+            if (activeBeacon === null) {
+                return [];
+            }
+            else {
+                const allResponses = await BeaconResponse.all ();
+
+                const filteredResponses = [];
+                for (const response of allResponses) {
+                    const responseBeacon = await response.beacon;
+                    if (responseBeacon.id === activeBeacon.id) {
+                        filteredResponses.push(response);
+                    }
+                }
+
+                return filteredResponses;
+            }
+        },
+        POLL_INTERVAL_MILLIS,
+        new Promise (resolve => resolve ([]))
+    );
+    const responses = usePromise(responsesPromise, [], [responsesPromise]);
+
+    const cancelBeacon = () => {
+        activeBeacon.destroy ();
+
+        selectedTimeRef.current = new Date ();
+
+        setActiveBeacon (null);
+    }
+
+    const sendBeacon = () => {
         const beacon = new Beacon ({
             sender: currentUserId,
             timestamp: selectedTimeRef.current
         });
-        beacon.save ().catch(err => setIsBeaconActive(false));
+        beacon.save ().then ();
+
+        setActiveBeacon (beacon);
     };
 
-    let beaconCards;
-    if (beacons.length === 0) {
-        beaconCards = (
-            <Text style={[styles.text, {marginTop: 8}]}>
-                None of your friends have a beacon active right now. Maybe you should send one yourself...
-            </Text>
-        );
-    }
-    else {
-        beaconCards = beacons.map (beacon => (
-            <BeaconCard beacon={beacon} key={beacon.id} />
-        ))
-    }
+    const items = [].concat (
+        responses.map (
+            r => ({
+                element: <BeaconResponseCard beaconResponse={r} key={r.id} />,
+                key: r.id
+            })
+        ),
+        friendRequests.map (
+            fr => ({
+                element: <FriendRequestCard friendRequest={fr} key={fr.id}/>,
+                key: fr.id
+            })
+        ),
+        beacons.map (beacon => ({
+            element: (
+                <BeaconCard
+                    beacon={beacon}
+                    currentUser={currentUser}
+                    key={beacon.id}
+                />),
+            key: beacon.id
+        }))
+    );
 
     return (
         <View>
@@ -93,13 +154,32 @@ export default function Home () {
                 actionRight={() => navigation.navigate ('SearchFriendPage')}
             />
             <ScrollView style={styles.main}>
-                <TimeSelect valueRef={selectedTimeRef} />
-                <Button text="Send" onClick={sendBeacon} isPrimary={true} style={{marginTop: 8}} />
+                <TimeSelect
+                    valueRef={selectedTimeRef}
+                    disabled={isActiveBeacon}
+                    highlight={isActiveBeacon}
+                    initialValue={
+                        activeBeacon !== null ?
+                        activeBeacon.timestamp :
+                        undefined
+                    }
+                />
+                <Button
+                    text={isActiveBeacon ? 'Cancel Beacon' : 'Send Beacon'}
+                    onClick={isActiveBeacon ? cancelBeacon : sendBeacon}
+                    highlight={isActiveBeacon}
+                    isPrimary={true}
+                    style={{marginTop: 8}}
+                />
                 <View style={{marginTop: 8}}>
-                    {friendRequests.map (
-                        fr => <FriendRequestCard friendRequest={fr} key={fr.id} />
-                    )}
-                    {beaconCards}
+                    <AnimatedViewCollection items={items} />
+                    {
+                        beacons.length === 0 ?
+                        <Text style={[styles.text, {marginTop: 8}]}>
+                            None of your friends have a beacon active right now. Maybe you should send one yourself...
+                        </Text> :
+                        <></>
+                    }
                 </View>
             </ScrollView>
         </View>

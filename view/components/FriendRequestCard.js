@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
         backgroundColor: BG_SECONDARY,
         padding: 8,
 
+        borderColor: FG_SECONDARY,
+        borderWidth: 1,
+
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
