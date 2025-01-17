@@ -94,6 +94,29 @@ export default class <?php echo $className; ?> {
     }
     <?php
         foreach ($associations as $ass) {
+            if ($ass->type == 'date' || $ass->type == 'time' || $ass->type == 'datetime-local'){ ?>
+
+    #<?php echo $ass->name ?>;
+
+    set <?php echo $ass->name ?> (value) {
+        if (value.getTime !== undefined) {
+            this.#<?php echo $ass->name ?> = value;
+        }
+        else {
+            this.#<?php echo $ass->name ?> = new Date ();
+            this.#<?php echo $ass->name ?>.setTime (value);
+        }
+    }
+
+    get <?php echo $ass->name ?> () {
+        return this.#<?php echo $ass->name ?>;
+    }
+        <?php
+            }
+        }
+    ?>
+    <?php
+        foreach ($associations as $ass) {
             if ($ass->isAssociation) {
                 $name = $ass->name;
                 $type = $ass->type;

@@ -55,7 +55,7 @@ export default class User {
     async destroy () {
         return RestEasy.instance.destroy ('User', this.id);
     }
-    
+        
 
 }
 

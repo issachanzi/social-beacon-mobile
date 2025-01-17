@@ -5,14 +5,34 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import BiDashLg from 'react-native-bootstrap-icons/icons/dash-lg';
 import BiPlusLg from 'react-native-bootstrap-icons/icons/plus-lg';
-import {BG_PRIMARY, FG_PRIMARY} from '../Colors';
+import {BG_PRIMARY, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
 
-export default function TimeSelect({ valueRef }) {
-    const input = React.useRef ();
+export default function TimeSelect({
+       valueRef,
+       disabled = false,
+       highlight = false,
+       initialValue = null
+}) {
     const [ value, setValue ] = React.useState (null);
     valueRef.current = value !== null ? value : new Date ();
 
+    React.useEffect(() => {
+        valueRef.current = value;
+
+        valueRef.current && console.log ("valueRef: " + valueRef.current.toString ());
+    }, [value]);
+
+    React.useEffect(() => {
+        if (initialValue !== null) {
+            setValue(initialValue);
+        }
+    }, [initialValue]);
+
     const incrementValue = () => {
+        if (disabled) {
+            return;
+        }
+
         setValue (value => {
             if (value === null || value.getTime() <= Date.now()) {
                 const date = new Date ();
@@ -38,6 +58,10 @@ export default function TimeSelect({ valueRef }) {
     };
 
     const decrementValue = () => {
+        if (disabled) {
+            return;
+        }
+
         setValue (value => {
             if (value === null) {
                 return null;
@@ -59,16 +83,23 @@ export default function TimeSelect({ valueRef }) {
         });
     };
 
+    const highlightStyle = highlight ? {
+        borderWidth: 2,
+        borderColor: FG_HIGHIGHT
+    } : {};
+
     return (
-        <View style={styles.TimeSelect}>
+        <View style={[styles.TimeSelect, highlightStyle]}>
             <Pressable onPress={decrementValue} style={styles.spinBtn}>
-                <BiDashLg
-                    viewBox="0, 0, 16, 16"
-                    width={32}
-                    height={32}
-                    style={styles.icon}
-                    fill={FG_PRIMARY}
-                />
+                {disabled ? <></> :
+                    <BiDashLg
+                        viewBox="0, 0, 16, 16"
+                        width={32}
+                        height={32}
+                        style={styles.icon}
+                        fill={FG_PRIMARY}
+                    />
+                }
             </Pressable>
             <View style={styles.display} >
                 <Text style={styles.absoluteTime}>
@@ -79,13 +110,15 @@ export default function TimeSelect({ valueRef }) {
                 </Text>
             </View>
             <Pressable onPress={incrementValue} style={styles.spinBtn}>
-                <BiPlusLg
-                    viewBox="0, 0, 16, 16"
-                    width={32}
-                    height={32}
-                    style={styles.icon}
-                    fill={FG_PRIMARY}
-                />
+                {disabled ? <></> :
+                    <BiPlusLg
+                        viewBox="0, 0, 16, 16"
+                        width={32}
+                        height={32}
+                        style={styles.icon}
+                        fill={FG_PRIMARY}
+                    />
+                }
             </Pressable>
         </View>
     );

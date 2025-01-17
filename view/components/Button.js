@@ -7,10 +7,15 @@ import {
     TouchableWithoutFeedback, View,
 } from 'react-native';
 import {useState} from 'react';
-import {BG_PRIMARY, BG_SECONDARY, BG_SYSTEM, FG_PRIMARY, FG_SECONDARY} from '../Colors';
-import DropShadow from 'react-native-drop-shadow';
+import {BG_PRIMARY, BG_SECONDARY, BG_SYSTEM, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
 
-export default function Button ({ text, onClick, isPrimary = false, style}) {
+export default function Button ({
+        text,
+        onClick,
+        isPrimary = false,
+        highlight = false,
+        style
+}) {
     const [isPressed, setIsPressed] = useState(false);
 
     const handlePressIn = () => setIsPressed (true);
@@ -24,7 +29,12 @@ export default function Button ({ text, onClick, isPrimary = false, style}) {
         isPrimary ? styles.primary : styles.secondary
     );
 
-    const buttonStyle = [styles.button, primaryStyle, style];
+    const highlightStyle = highlight ? {
+        borderColor: FG_HIGHIGHT,
+        borderWidth: 2,
+    } : {};
+
+    const buttonStyle = [styles.button, primaryStyle, style, highlightStyle];
     const viewStyle = [styles.view, primaryStyle];
     const textStyle = [styles.text, primaryStyle];
 

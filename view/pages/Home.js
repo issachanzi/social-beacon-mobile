@@ -25,6 +25,7 @@ const POLL_INTERVAL_MILLIS = 10_000;
 export default function Home () {
 
     const navigation = useNavigation ();
+    const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
     const beaconsPromise = usePoll (
         Beacon.all, POLL_INTERVAL_MILLIS,

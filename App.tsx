@@ -7,6 +7,7 @@
 
 import React, {ReactElement} from 'react';
 
+import * as push from './view/utils/push';
 import RestEasy from "./model/RestEasy";
 import HomePage from './view/pages/Home';
 import LoginPage from "./view/pages/Login";
@@ -43,41 +44,12 @@ const Navigation = createStaticNavigation (Stack);
 
 export default function App(): React.JSX.Element {
     RestEasy.init('http://192.168.1.219:7070/api');
+    //RestEasy.init ('http://192.168.8.118:7070/api');
 
-    // const router = createMemoryRouter([
-    //   {
-    //     path: "/",
-    //     element: <LoginPage />,
-    //   },
-    //   {
-    //     path: "/login",
-    //     element: <LoginPage />,
-    //   },
-    //   {
-    //     path: '/create-account',
-    //     element: <CreateAccountPage />,
-    //   }
-    // ]);
-
-    // const router = new Router();
-    // router.push(<LoginPage router={router}/>);
+    React.useEffect (() => {
+        push.setup ();
+    }, []);
 
     return <Navigation />;
 }
 
-// function Page (props: { children: React.JSX.Element; }) {
-//   const Transition  = createTransition (SlideLeft);
-//
-//   const [prevChildren, setPrevChildren] = React.useState(props.children);
-//
-//   React.useEffect (() => {
-//       setPrevChildren (props.children);
-//       Transition.show(props.children);
-//   });
-//
-//   return (
-//     <Transition>
-//       {prevChildren}
-//     </Transition>
-//   );
-// }

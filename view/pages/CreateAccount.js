@@ -3,11 +3,10 @@ import React, {useRef, useState} from 'react';
 import NavBar from '../components/NavBar';
 import {BG_SECONDARY, BG_SYSTEM, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
 import Button from '../components/Button';
-import RestEasy from '../../model/RestEasy';
 import Login from '../../model/Login';
-import Keychain from 'react-native-keychain';
 import User from '../../model/User';
 import {useNavigation} from '@react-navigation/core';
+import {processLogin} from '../utils/login';
 
 export default function CreateAccountPage () {
     const navigation = useNavigation();
@@ -58,8 +57,7 @@ export default function CreateAccountPage () {
                 return login;
             })
             .then(async login => {
-                RestEasy.instance.authorization = login.token;
-                await Keychain.setGenericPassword((await login.user).id, login.token);
+                await processLogin (login);
                 navigation.goBack ();
                 navigation.replace ('HomePage');
             })
@@ -74,6 +72,7 @@ export default function CreateAccountPage () {
                     Alert.alert ("That username is already taken. Please choose a different one");
                 }
                 else {
+                    console.log (err);
                     Alert.alert ('Unknown error while logging in');
                 }
             })
