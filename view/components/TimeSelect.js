@@ -6,6 +6,9 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import BiDashLg from 'react-native-bootstrap-icons/icons/dash-lg';
 import BiPlusLg from 'react-native-bootstrap-icons/icons/plus-lg';
 import {BG_PRIMARY, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
+import * as Rnra from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import {useHighlight} from '../utils/hooks';
 
 export default function TimeSelect({
        valueRef,
@@ -83,13 +86,14 @@ export default function TimeSelect({
         });
     };
 
-    const highlightStyle = highlight ? {
-        borderWidth: 2,
-        borderColor: FG_HIGHIGHT
-    } : {};
-
+    const highlightAnimSv = useHighlight();
+    const highlightAnimation = Rnra.useAnimatedStyle (() => ({
+        borderWidth: 1,
+        borderColor: highlightAnimSv.value
+    }));
+    const highlightStyle = highlight ? highlightAnimation : {};
     return (
-        <View style={[styles.TimeSelect, highlightStyle]}>
+        <Animated.View style={[styles.TimeSelect, highlightStyle]}>
             <Pressable onPress={decrementValue} style={styles.spinBtn}>
                 {disabled ? <></> :
                     <BiDashLg
@@ -120,7 +124,7 @@ export default function TimeSelect({
                     />
                 }
             </Pressable>
-        </View>
+        </Animated.View>
     );
 }
 
