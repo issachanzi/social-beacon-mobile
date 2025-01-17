@@ -8,6 +8,9 @@ import {
 } from 'react-native';
 import {useState} from 'react';
 import {BG_PRIMARY, BG_SECONDARY, BG_SYSTEM, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
+import {useHighlight} from '../utils/hooks';
+import * as Rnra from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 export default function Button ({
         text,
@@ -29,22 +32,25 @@ export default function Button ({
         isPrimary ? styles.primary : styles.secondary
     );
 
-    const highlightStyle = highlight ? {
-        borderColor: FG_HIGHIGHT,
-        borderWidth: 2,
-    } : {};
+    const highlightAnimSv = useHighlight();
+    const highlightAnimation = Rnra.useAnimatedStyle (
+        () => ({
+            borderWidth: 1,
+            borderColor: highlightAnimSv.value
+        })
+    );
+    const highlightStyle = highlight ? highlightAnimation : {};
 
     const buttonStyle = [styles.button, primaryStyle, style, highlightStyle];
-    const viewStyle = [styles.view, primaryStyle];
     const textStyle = [styles.text, primaryStyle];
 
     return (
-        <TouchableOpacity onPress={onClick} style={buttonStyle}>
-            <View style={viewStyle}>
+        <TouchableOpacity onPress={onClick}>
+            <Animated.View style={buttonStyle}>
                 <Text style={textStyle}>
                     {text}
                 </Text>
-            </View>
+            </Animated.View>
         </TouchableOpacity>
     );
 }

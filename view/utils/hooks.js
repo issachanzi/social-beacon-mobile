@@ -1,4 +1,7 @@
 import React from "react";
+import {FG_HIGHIGHT, FG_PRIMARY} from '../Colors';
+import * as Rnra from 'react-native-reanimated';
+import {withTiming} from 'react-native-reanimated';
 
 export function usePromise (promise, defaultValue = null, deps = []) {
     const [state, setState] = React.useState(defaultValue);
@@ -48,5 +51,24 @@ export function useRefresh () {
     const [state, setState] = React.useState(0);
 
     return () => setState(n => n + 1);
+}
+
+export function useHighlight () {
+    const anim = Rnra.useSharedValue (FG_HIGHIGHT);
+
+    React.useEffect(() => {
+        anim.value = Rnra.withRepeat(
+            withTiming (
+                FG_PRIMARY,
+                {
+                    duration: 1000
+                }
+            ),
+            0,
+            true
+        );
+    }, []);
+
+    return anim;
 }
 
