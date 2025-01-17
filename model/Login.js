@@ -31,13 +31,7 @@ export default class Login {
     }
 
     async save () {
-        const obj = {
-            password : this.password,
-            id : this.id,
-            user : await this.user !== null && await this.user !== undefined ? (await this.user).id : undefined,
-            token : this.token,
-            username : this.username,
-        };
+        const obj = await this.toObject ();
 
         if (this.id === undefined) {
             const response = await RestEasy.instance.post ('Login', obj);
@@ -49,6 +43,18 @@ export default class Login {
         else {
             await RestEasy.instance.put ('Login', this.id, obj);
         }
+    }
+
+    async toObject () {
+        const obj = {
+            password : this.password,
+            id : this.id,
+            user : await this.user !== null && await this.user !== undefined ? (await this.user).id : undefined,
+            token : this.token,
+            username : this.username,
+        };
+
+        return obj;
     }
 
     async destroy () {

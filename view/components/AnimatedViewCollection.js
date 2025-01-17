@@ -22,6 +22,8 @@ export default function AnimatedViewCollection ({ items }) {
         return <></>;
     }
 
+    console.table(currentItems);
+
     return (currentItems.map (item => (
         <AnimatedViewEntry
             state={item.state}

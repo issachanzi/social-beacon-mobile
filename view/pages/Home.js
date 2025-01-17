@@ -7,7 +7,7 @@ import BeaconCard from '../components/BeaconCard.js';
 
 import Beacon from "../../model/Beacon";
 import RestEasy from "../../model/RestEasy";
-import {usePoll, usePromise} from "../utils/hooks";
+import {useAsyncStoragePoll, usePoll, usePromise} from '../utils/hooks';
 import {useNavigation} from '@react-navigation/core';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Keychain from 'react-native-keychain';
@@ -25,29 +25,78 @@ const POLL_INTERVAL_MILLIS = 10_000;
 export default function Home () {
 
     const navigation = useNavigation ();
-    const [isBeaconActive, setIsBeaconActive] = React.useState(false);
-
-    const beaconsPromise = usePoll (
-        Beacon.all, POLL_INTERVAL_MILLIS,
-        new Promise(resolve => resolve ([])),
-        []
-    );
-    const beacons = usePromise(beaconsPromise, [], [beaconsPromise]);
 
     const [activeBeacon, setActiveBeacon] = React.useState(null);
     const isActiveBeacon = activeBeacon !== null;
 
     const selectedTimeRef = React.useRef(new Date());
 
-    // const currentUserId = localStorage.getItem('currentUserId');
-
     const credentials = usePromise (Keychain.getGenericPassword ());
     const [currentUserId, setCurrentUserId] = React.useState (null);
     const currentUser = usePromise(
-        User.byId(currentUserId),
-        null,
+        (async () => {
+            if (currentUserId !== null) {
+                return User.byId(currentUserId);
+            }
+            else {
+                return null;
+            }
+        }) (),
         [currentUserId]
     );
+
+    const beacons = useAsyncStoragePoll (
+        Beacon.all,
+        POLL_INTERVAL_MILLIS,
+        [],
+        'home-beacons',
+        async value => JSON.stringify (
+            await Promise.all (value.map (v => v.toObject ()))
+        ),
+        storageValue => JSON.parse(storageValue).map (v => new Beacon (v)),
+        [currentUserId]
+    );
+
+    const friendRequests = useAsyncStoragePoll (
+        () => FriendRequest.where ({to: currentUserId}),
+        POLL_INTERVAL_MILLIS,
+        [],
+        'home-friend-requests',
+        async value => JSON.stringify (
+            await Promise.all (value.map (v => v.toObject ()))
+        ),
+        storageValue => JSON.parse(storageValue).map (v => new FriendRequest (v)),
+        [currentUserId]
+    );
+
+    const responses = useAsyncStoragePoll (
+        async () => {
+            if (activeBeacon === null) {
+                return [];
+            }
+            else {
+                const allResponses = await BeaconResponse.all ();
+
+                const filteredResponses = [];
+                for (const response of allResponses) {
+                    const responseBeacon = await response.beacon;
+                    if (responseBeacon.id === activeBeacon.id) {
+                        filteredResponses.push(response);
+                    }
+                }
+
+                return filteredResponses;
+            }
+        },
+        POLL_INTERVAL_MILLIS,
+        [],
+        'home-responses',
+        async value => JSON.stringify (
+            await Promise.all (value.map (v => v.toObject ()))
+        ),
+        storageValue => JSON.parse(storageValue).map (v => new BeaconResponse (v)),
+        [currentUserId]
+    )
 
     React.useEffect (() => {
         if (credentials === false) {
@@ -68,42 +117,6 @@ export default function Home () {
             }
         })
     }, [currentUserId]);
-
-    const friendRequestsPromise = usePoll(
-        () => FriendRequest.where ({to: currentUserId}),
-        POLL_INTERVAL_MILLIS,
-        new Promise(resolve => resolve ([])),
-        [currentUserId]
-    );
-    const friendRequests = usePromise(
-        friendRequestsPromise,
-        [],
-        [friendRequestsPromise]
-    );
-
-    const responsesPromise = usePoll (
-        async () => {
-            if (activeBeacon === null) {
-                return [];
-            }
-            else {
-                const allResponses = await BeaconResponse.all ();
-
-                const filteredResponses = [];
-                for (const response of allResponses) {
-                    const responseBeacon = await response.beacon;
-                    if (responseBeacon.id === activeBeacon.id) {
-                        filteredResponses.push(response);
-                    }
-                }
-
-                return filteredResponses;
-            }
-        },
-        POLL_INTERVAL_MILLIS,
-        new Promise (resolve => resolve ([]))
-    );
-    const responses = usePromise(responsesPromise, [], [responsesPromise]);
 
     const cancelBeacon = () => {
         activeBeacon.destroy ();
@@ -185,8 +198,6 @@ export default function Home () {
             </ScrollView>
         </View>
     );
-
-    // return <Text style={{color: 'white'}}>Hello, world!</Text>;
 }
 
 const styles = StyleSheet.create({

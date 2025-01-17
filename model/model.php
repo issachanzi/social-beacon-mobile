@@ -57,6 +57,21 @@ export default class <?php echo $className; ?> {
     }
 
     async save () {
+        const obj = await this.toObject ();
+
+        if (this.id === undefined) {
+            const response = await RestEasy.instance.post ('<?php echo $className; ?>', obj);
+
+            Object.keys(response).forEach (k => {
+                this [k] = response [k];
+            });
+        }
+        else {
+            await RestEasy.instance.put ('<?php echo $className; ?>', this.id, obj);
+        }
+    }
+
+    async toObject () {
         const obj = {
 <?php
                 foreach ($associations as $ass) {
@@ -77,16 +92,7 @@ export default class <?php echo $className; ?> {
             ?>
         };
 
-        if (this.id === undefined) {
-            const response = await RestEasy.instance.post ('<?php echo $className; ?>', obj);
-
-            Object.keys(response).forEach (k => {
-                this [k] = response [k];
-            });
-        }
-        else {
-            await RestEasy.instance.put ('<?php echo $className; ?>', this.id, obj);
-        }
+        return obj;
     }
 
     async destroy () {

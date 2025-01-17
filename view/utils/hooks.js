@@ -2,6 +2,8 @@ import React from "react";
 import {FG_HIGHIGHT, FG_PRIMARY} from '../Colors';
 import * as Rnra from 'react-native-reanimated';
 import {withTiming} from 'react-native-reanimated';
+import {asyncStorage} from 'reactotron-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function usePromise (promise, defaultValue = null, deps = []) {
     const [state, setState] = React.useState(defaultValue);
@@ -45,6 +47,61 @@ export function usePoll (
     }, deps);
 
     return cachedResult;
+}
+
+export function useAsyncPoll (
+    pollFunction,
+    pollIntervalMillis,
+    defaultValue = null,
+    deps = []
+) {
+    const promise = usePoll (
+        pollFunction,
+        pollIntervalMillis,
+        new Promise (resolve => resolve (defaultValue))
+    );
+
+    return usePromise(promise, defaultValue, deps);
+}
+
+export function useAsyncStoragePoll (
+    pollFunction,
+    pollIntervalMillis,
+    defaultValue = null,
+    storageKey,
+    saveFunction = JSON.stringify,
+    loadFunction = JSON.parse,
+    deps = []
+) {
+    const promise = usePoll (
+        pollFunction,
+        pollIntervalMillis,
+        async () => {
+            const storageValue = await AsyncStorage.getItem (storageKey);
+
+            if (storageValue !== null) {
+                const value = await loadFunction(storageValue);
+
+                return value;
+            }
+            else {
+                return defaultValue;
+            }
+        },
+        deps
+    );
+
+    const result = usePromise(promise, defaultValue, [promise]);
+
+    React.useEffect (() => {
+        (async () => {
+            const storageValue = await saveFunction (result);
+
+            await AsyncStorage.setItem(storageKey, storageValue);
+        }) ();
+    }, [result])
+
+    return result;
 }
 
 export function useRefresh () {

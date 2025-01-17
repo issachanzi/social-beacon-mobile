@@ -29,11 +29,7 @@ export default class NotificationSubscribe {
     }
 
     async save () {
-        const obj = {
-            id : this.id,
-            user : await this.user !== null && await this.user !== undefined ? (await this.user).id : undefined,
-            token : this.token,
-        };
+        const obj = await this.toObject ();
 
         if (this.id === undefined) {
             const response = await RestEasy.instance.post ('NotificationSubscribe', obj);
@@ -47,10 +43,20 @@ export default class NotificationSubscribe {
         }
     }
 
+    async toObject () {
+        const obj = {
+            id : this.id,
+            user : await this.user !== null && await this.user !== undefined ? (await this.user).id : undefined,
+            token : this.token,
+        };
+
+        return obj;
+    }
+
     async destroy () {
         return RestEasy.instance.destroy ('NotificationSubscribe', this.id);
     }
-    
+        
     #user_id;
     #user_memo;
 

@@ -32,11 +32,7 @@ export default class Beacon {
     }
 
     async save () {
-        const obj = {
-            sender : await this.sender !== null && await this.sender !== undefined ? (await this.sender).id : undefined,
-            id : this.id,
-            timestamp : this.timestamp !== undefined && this.timestamp !== null ? this.timestamp.getTime () : undefined,
-        };
+        const obj = await this.toObject ();
 
         if (this.id === undefined) {
             const response = await RestEasy.instance.post ('Beacon', obj);
@@ -48,6 +44,16 @@ export default class Beacon {
         else {
             await RestEasy.instance.put ('Beacon', this.id, obj);
         }
+    }
+
+    async toObject () {
+        const obj = {
+            sender : await this.sender !== null && await this.sender !== undefined ? (await this.sender).id : undefined,
+            id : this.id,
+            timestamp : this.timestamp !== undefined && this.timestamp !== null ? this.timestamp.getTime () : undefined,
+        };
+
+        return obj;
     }
 
     async destroy () {

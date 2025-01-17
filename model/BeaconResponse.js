@@ -30,11 +30,7 @@ export default class BeaconResponse {
     }
 
     async save () {
-        const obj = {
-            beacon : await this.beacon !== null && await this.beacon !== undefined ? (await this.beacon).id : undefined,
-            id : this.id,
-            user : await this.user !== null && await this.user !== undefined ? (await this.user).id : undefined,
-        };
+        const obj = await this.toObject ();
 
         if (this.id === undefined) {
             const response = await RestEasy.instance.post ('BeaconResponse', obj);
@@ -48,10 +44,20 @@ export default class BeaconResponse {
         }
     }
 
+    async toObject () {
+        const obj = {
+            beacon : await this.beacon !== null && await this.beacon !== undefined ? (await this.beacon).id : undefined,
+            id : this.id,
+            user : await this.user !== null && await this.user !== undefined ? (await this.user).id : undefined,
+        };
+
+        return obj;
+    }
+
     async destroy () {
         return RestEasy.instance.destroy ('BeaconResponse', this.id);
     }
-    
+        
     #beacon_id;
     #beacon_memo;
 

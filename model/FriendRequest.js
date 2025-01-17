@@ -29,11 +29,7 @@ export default class FriendRequest {
     }
 
     async save () {
-        const obj = {
-            from : await this.from !== null && await this.from !== undefined ? (await this.from).id : undefined,
-            id : this.id,
-            to : await this.to !== null && await this.to !== undefined ? (await this.to).id : undefined,
-        };
+        const obj = await this.toObject ();
 
         if (this.id === undefined) {
             const response = await RestEasy.instance.post ('FriendRequest', obj);
@@ -45,6 +41,16 @@ export default class FriendRequest {
         else {
             await RestEasy.instance.put ('FriendRequest', this.id, obj);
         }
+    }
+
+    async toObject () {
+        const obj = {
+            from : await this.from !== null && await this.from !== undefined ? (await this.from).id : undefined,
+            id : this.id,
+            to : await this.to !== null && await this.to !== undefined ? (await this.to).id : undefined,
+        };
+
+        return obj;
     }
 
     async destroy () {
