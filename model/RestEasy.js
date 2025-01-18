@@ -9,7 +9,9 @@ export default class RestEasy {
     }
 
     static init (apiBaseUrl) {
-        RestEasy.instance = new RestEasy(apiBaseUrl);
+        if (!RestEasy.instance) {
+            RestEasy.instance = new RestEasy(apiBaseUrl);
+        }
     }
 
     async get (modelName, id, query) {

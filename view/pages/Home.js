@@ -20,7 +20,7 @@ import BeaconResponse from '../../model/BeaconResponse';
 import BeaconResponseCard from '../components/BeaconResponseCard';
 import AnimatedViewCollection from '../components/AnimatedViewCollection';
 
-const POLL_INTERVAL_MILLIS = 10_000;
+const POLL_INTERVAL_MILLIS = 5_000;
 
 export default function Home () {
 

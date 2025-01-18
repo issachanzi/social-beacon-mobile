@@ -149,10 +149,17 @@ function AnimatedViewEntry ({state, children, onChangeState}) {
 }
 
 function diff (oldList, newList) {
-    const isKeyInNewList = {};
-    newList.forEach(item => {
-        isKeyInNewList[item.key] = true;
+    const IN_OLD = 0b00000001;
+    const IN_NEW = 0b00000010;
+    const IN_BOTH = IN_OLD | IN_NEW;
+
+    const itemsInLists = {};
+    oldList.forEach(item => {
+        if (item.state !== STATE_REMOVE_FINISHED) {
+            itemsInLists[item.key] |= IN_OLD;
+        }
     });
+    newList.forEach(item => itemsInLists[item.key] |= IN_NEW);
 
     const resultList = [];
 
@@ -165,29 +172,26 @@ function diff (oldList, newList) {
         if (oldItem && oldItem.state === STATE_REMOVE_FINISHED) {
             oldIndex++;
         }
-        else if (oldItem && oldItem.state === STATE_REMOVE_ANIMATING) {
+        else if (oldItem && itemsInLists[oldItem.key] !== IN_BOTH) {
+            if (oldItem.state < STATE_REMOVE_PENDING) {
+                oldItem.state = STATE_REMOVE_PENDING;
+            }
             resultList.push(oldItem);
             oldIndex++;
         }
-        else if (oldItem && newItem && newItem.key === oldItem.key) {
-            resultList.push({
-                ...newItem,
-                key: oldItem.key,
-                state: oldItem.state <= STATE_ACTIVE ? oldItem.state : STATE_ACTIVE
-            });
-            oldIndex++;
-            newIndex++;
-        }
-        else if (oldItem) {
-            oldItem.state = STATE_REMOVE_PENDING;
-            resultList.push(oldItem);
-            oldIndex++;
-        }
-        else if (newItem) {
+        else if (newItem && itemsInLists[newItem.key] !== IN_BOTH) {
             resultList.push({
                 ...newItem,
                 state: STATE_NEW
             });
+            newIndex++;
+        }
+        else if (oldItem && newItem && oldItem.key === newItem.key) {
+            resultList.push({
+                ...newItem,
+                state: STATE_NEW
+            });
+            oldIndex++;
             newIndex++;
         }
         else {
