@@ -28,7 +28,17 @@ export default function Home () {
     const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
     const beaconsPromise = usePoll (
-        Beacon.all, POLL_INTERVAL_MILLIS,
+        async () => {
+            const allBeacons = await Beacon.all ();
+            const filter = await Promise.all (
+                allBeacons.map (
+                    async beacon => (await beacon.sender).id !== currentUserId
+                )
+            );
+
+            return allBeacons.filter ((beacon, index) => filter [index]);
+        },
+        POLL_INTERVAL_MILLIS,
         new Promise(resolve => resolve ([])),
         []
     );
@@ -137,14 +147,14 @@ export default function Home () {
             })
         ),
         beacons.map (beacon => ({
-            element: (
-                <BeaconCard
-                    beacon={beacon}
-                    currentUser={currentUser}
-                    key={beacon.id}
-                />),
-            key: beacon.id
-        }))
+                element: (
+                    <BeaconCard
+                        beacon={beacon}
+                        currentUser={currentUser}
+                        key={beacon.id}
+                    />),
+                key: beacon.id
+            }))
     );
 
     return (
