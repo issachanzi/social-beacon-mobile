@@ -5,6 +5,7 @@ import {usePoll, usePromise} from '../utils/hooks';
 import {BG_SECONDARY, FG_PRIMARY, FG_SECONDARY} from '../Colors';
 import User from '../../model/User';
 import SearchResults from '../components/SearchResults';
+import Keychain from 'react-native-keychain';
 
 const POLL_INTERVAL_MILLIS = 200;
 
@@ -12,12 +13,15 @@ export default function SearchFriend () {
     const [query, setQuery] = React.useState('');
     const allUsers = usePromise(User.all());
 
+    const credentials = usePromise (Keychain.getGenericPassword (), {});
+
     const doSearch = () => {
         if (allUsers === null) {
             return [];
         }
 
         return allUsers
+            .filter (user => user.id !== credentials.username)
             .filter (user => (
                 user.username.toLowerCase().includes(query.toLowerCase())
                 || user.displayName.toLowerCase().includes(query.toLowerCase())
