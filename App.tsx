@@ -19,10 +19,10 @@ import SearchFriendPage from "./view/pages/SearchFriend";
 // import {View} from "react-native";
 // import {Router} from "./view/Router";
 // import RouterView from "./view/RouterView";
-import {BG_SYSTEM} from "./view/Colors";
+import {BG_SYSTEM, BG_PRIMARY} from "./view/Colors";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createStaticNavigation} from "@react-navigation/native";
-import {Alert, Text, View} from "react-native";
+import {Alert, Text, View, SafeAreaView} from "react-native";
 
 const Stack = createNativeStackNavigator({
     screenOptions: {
@@ -50,6 +50,13 @@ export default function App(): React.JSX.Element {
         push.setup ();
     }, []);
 
-    return <Navigation />;
+    return (
+        <>
+            <SafeAreaView style={{flex: 0, backgroundColor: BG_PRIMARY}} />
+            <SafeAreaView style={{flex: 1, backgroundColor: BG_SYSTEM}}>
+                <Navigation />
+            </SafeAreaView>
+        </>
+    );
 }
 

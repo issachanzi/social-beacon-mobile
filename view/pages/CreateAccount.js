@@ -92,18 +92,18 @@ export default function CreateAccountPage () {
                     placeholder="Enter username"
                     autoCapitalize="none"
                     autoComplete="username"
-                    onSubmitEditing={focusField (refs.displayName)}
-                    onChangeText={updateField ('username')}
+                    onSubmitEditing={() => focusField (refs.displayName)}
+                    onChangeText={() => updateField ('username')}
                     ref={refs.user}
                 />
                 <Text style={styles.label}>Display name</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Eg. Nelson"
-                    autoCapitalize="words`"
+                    autoCapitalize="words"
                     autoComplete="given-name"
-                    onSubmitEditing={focusField (refs.password)}
-                    onChangeText={updateField ('displayName')}
+                    onSubmitEditing={() => focusField (refs.password)}
+                    onChangeText={() => updateField ('displayName')}
                     ref={refs.user}
                 />
                 <Text style={styles.label} >Password</Text>
@@ -112,8 +112,8 @@ export default function CreateAccountPage () {
                     placeholder="Enter password"
                     autoCapitalize="none"
                     secureTextEntry={true}
-                    onSubmitEditing={focusField (refs.repeatPassword)}
-                    onChangeText={updateField ('password')}
+                    onSubmitEditing={() => focusField (refs.repeatPassword)}
+                    onChangeText={() => updateField ('password')}
                     ref={refs.password}
                 />
                 <Text style={styles.label} >Repeat password</Text>
@@ -123,7 +123,7 @@ export default function CreateAccountPage () {
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onSubmitEditing={handleSubmit}
-                    onChangeText={updateField ('repeatPassword')}
+                    onChangeText={() => updateField ('repeatPassword')}
                     ref={refs.repeatPassword}
                 />
                 <Button text="Create account" onClick={handleSubmit} isPrimary={true} />

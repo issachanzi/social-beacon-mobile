@@ -60,6 +60,8 @@ const styles = StyleSheet.create ({
         marginTop: 16,
         overflow: 'hidden',
         height: 40,
+        
+        justifyContent: 'center',
 
         borderRadius: 8,
         borderWidth: 1,
@@ -72,7 +74,6 @@ const styles = StyleSheet.create ({
     text: {
         fontSize: 24,
         lineHeight: 24,
-        height: '100%',
         textAlign: 'center',
         verticalAlign: 'middle',
     },

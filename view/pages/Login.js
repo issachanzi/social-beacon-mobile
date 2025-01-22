@@ -62,6 +62,7 @@ export default function LoginPage () {
           <TextInput
             style={styles.input}
             placeholder="Enter username"
+            placeholderTextColor={FG_SECONDARY}
             autoCapitalize="none"
             autoComplete="username"
             onSubmitEditing={handleSubmitUsername}
@@ -72,6 +73,7 @@ export default function LoginPage () {
           <TextInput
             style={styles.input}
             placeholder="Enter password"
+            placeholderTextColor={FG_SECONDARY}
             secureTextEntry={true}
             autoCapitalize="none"
             autoComplete="current-password"
