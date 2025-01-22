@@ -90,6 +90,7 @@ export default function CreateAccountPage () {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter username"
+                    placeholderTextColor={FG_SECONDARY}
                     autoCapitalize="none"
                     autoComplete="username"
                     onSubmitEditing={() => focusField (refs.displayName)}
@@ -100,6 +101,7 @@ export default function CreateAccountPage () {
                 <TextInput
                     style={styles.input}
                     placeholder="Eg. Nelson"
+                    placeholderTextColor={FG_SECONDARY}
                     autoCapitalize="words"
                     autoComplete="given-name"
                     onSubmitEditing={() => focusField (refs.password)}
@@ -110,6 +112,7 @@ export default function CreateAccountPage () {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter password"
+                    placeholderTextColor={FG_SECONDARY}
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onSubmitEditing={() => focusField (refs.repeatPassword)}
@@ -120,6 +123,7 @@ export default function CreateAccountPage () {
                 <TextInput
                     style={styles.input}
                     placeholder="Repeat password"
+                    placeholderTextColor={FG_SECONDARY} 
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onSubmitEditing={handleSubmit}
