@@ -87,11 +87,11 @@ export default function TimeSelect({
     };
 
     const highlightAnimSv = useHighlight();
-    const highlightAnimation = Rnra.useAnimatedStyle (() => ({
-        borderWidth: 1,
+    const highlightStyle = Rnra.useAnimatedStyle (() => ({
+        borderWidth: highlight ? 1 : 0,
         borderColor: highlightAnimSv.value
     }));
-    const highlightStyle = highlight ? highlightAnimation : {};
+
     return (
         <Animated.View style={[styles.TimeSelect, highlightStyle]}>
             <Pressable onPress={decrementValue} style={styles.spinBtn}>
