@@ -1,3 +1,4 @@
 <resources>
-<color name ='iconBackground'>#3C2556</color> 
+    <color name='iconBackground'>#3C2556</color>
+    <color name="iconbackground">#3C2556</color>
 </resources>
