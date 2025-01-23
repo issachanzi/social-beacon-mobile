@@ -94,7 +94,7 @@ export default function CreateAccountPage () {
                     autoCapitalize="none"
                     autoComplete="username"
                     onSubmitEditing={() => focusField (refs.displayName)}
-                    onChangeText={() => updateField ('username')}
+                    onChangeText={updateField ('username')}
                     ref={refs.user}
                 />
                 <Text style={styles.label}>Display name</Text>
@@ -105,7 +105,7 @@ export default function CreateAccountPage () {
                     autoCapitalize="words"
                     autoComplete="given-name"
                     onSubmitEditing={() => focusField (refs.password)}
-                    onChangeText={() => updateField ('displayName')}
+                    onChangeText={updateField ('displayName')}
                     ref={refs.user}
                 />
                 <Text style={styles.label} >Password</Text>
@@ -116,18 +116,18 @@ export default function CreateAccountPage () {
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onSubmitEditing={() => focusField (refs.repeatPassword)}
-                    onChangeText={() => updateField ('password')}
+                    onChangeText={updateField ('password')}
                     ref={refs.password}
                 />
                 <Text style={styles.label} >Repeat password</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Repeat password"
-                    placeholderTextColor={FG_SECONDARY} 
+                    placeholderTextColor={FG_SECONDARY}
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onSubmitEditing={handleSubmit}
-                    onChangeText={() => updateField ('repeatPassword')}
+                    onChangeText={updateField ('repeatPassword')}
                     ref={refs.repeatPassword}
                 />
                 <Button text="Create account" onClick={handleSubmit} isPrimary={true} />
