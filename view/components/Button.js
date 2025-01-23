@@ -33,13 +33,12 @@ export default function Button ({
     );
 
     const highlightAnimSv = useHighlight();
-    const highlightAnimation = Rnra.useAnimatedStyle (
+    const highlightStyle = Rnra.useAnimatedStyle (
         () => ({
             borderWidth: 1,
-            borderColor: highlightAnimSv.value
+            borderColor: highlight ? highlightAnimSv.value : FG_SECONDARY
         })
     );
-    const highlightStyle = highlight ? highlightAnimation : {};
 
     const buttonStyle = [styles.button, primaryStyle, style, highlightStyle];
     const textStyle = [styles.text, primaryStyle];
@@ -60,7 +59,7 @@ const styles = StyleSheet.create ({
         marginTop: 16,
         overflow: 'hidden',
         height: 40,
-        
+
         justifyContent: 'center',
 
         borderRadius: 8,
