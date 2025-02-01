@@ -19,6 +19,8 @@ target 'SocialBeaconAndroid' do
   
   pod 'FirebaseCore', :modular_headers => true;
   pod 'GoogleUtilities', :modular_headers => true;
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
 
   use_react_native!(
     :path => config[:reactNativePath],
