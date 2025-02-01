@@ -14,6 +14,9 @@ export async function token () {
             PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
         );
     }
+    else if (Platform.OS === 'ios') {
+        await messaging().registerDeviceForRemoteMessages();
+    }
 
     return await messaging ().getToken();
 }
