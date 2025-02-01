@@ -13,7 +13,7 @@ import {Keyboard, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Keychain from 'react-native-keychain';
 import {FG_SECONDARY} from '../Colors';
 import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
-import BiBoxArrowLeft from 'react-native-bootstrap-icons/icons/box-arrow-left';
+import BiGear from 'react-native-bootstrap-icons/icons/gear';
 import FriendRequestCard from '../components/FriendRequestCard';
 import FriendRequest from '../../model/FriendRequest';
 import User from '../../model/User';
@@ -116,12 +116,6 @@ export default function Home () {
     );
     const responses = usePromise(responsesPromise, [], [responsesPromise]);
 
-    const logout = () => {
-        Keychain.resetGenericPassword ().then ();
-
-        navigation.navigate ('LoginPage');
-    }
-
     const cancelBeacon = () => {
         activeBeacon.destroy ();
 
@@ -168,8 +162,8 @@ export default function Home () {
         <View>
             <NavBar
                 backButton={false}
-                iconLeft={BiBoxArrowLeft}
-                actionLeft={logout}
+                iconLeft={BiGear}
+                actionLeft={() => navigation.navigate ('SettingsPage')}
                 iconRight={BiPersonAdd}
                 actionRight={() => navigation.navigate ('SearchFriendPage')}
             />

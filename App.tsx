@@ -13,6 +13,7 @@ import HomePage from './view/pages/Home';
 import LoginPage from "./view/pages/Login";
 import CreateAccountPage from "./view/pages/CreateAccount";
 import SearchFriendPage from "./view/pages/SearchFriend";
+import SettingsPage from "./view/pages/Settings";
 
 // // @ts-ignore
 // import { createTransition, SlideLeft } from 'react-native-transition';
@@ -23,6 +24,8 @@ import {BG_SYSTEM, BG_PRIMARY} from "./view/Colors";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createStaticNavigation} from "@react-navigation/native";
 import {Alert, Text, View, SafeAreaView} from "react-native";
+
+const SERVER_URL = 'https://api.beacon.issachanzi.net/api';
 
 const Stack = createNativeStackNavigator({
     screenOptions: {
@@ -35,7 +38,8 @@ const Stack = createNativeStackNavigator({
         HomePage,
         LoginPage,
         CreateAccountPage,
-        SearchFriendPage
+        SearchFriendPage,
+        SettingsPage
     }
 });
 
@@ -43,8 +47,7 @@ const Navigation = createStaticNavigation (Stack);
 
 
 export default function App(): React.JSX.Element {
-    RestEasy.init('http://192.168.1.219:7070/api');
-    //RestEasy.init ('http://192.168.8.118:7070/api');
+    RestEasy.init(SERVER_URL);
 
     React.useEffect (() => {
         push.setup ();

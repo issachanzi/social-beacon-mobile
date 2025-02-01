@@ -1,4 +1,4 @@
-import {Alert, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Alert, Linking, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import NavBar from '../components/NavBar';
 import {BG_SECONDARY, BG_SYSTEM, FG_HIGHIGHT, FG_PRIMARY, FG_SECONDARY} from '../Colors';
@@ -7,6 +7,8 @@ import Login from '../../model/Login';
 import User from '../../model/User';
 import {useNavigation} from '@react-navigation/core';
 import {processLogin} from '../utils/login';
+
+const PRIVACY_POLICY_URL = 'https://beacon.issachanzi.net/privacy';
 
 export default function CreateAccountPage () {
     const navigation = useNavigation();
@@ -135,6 +137,15 @@ export default function CreateAccountPage () {
                     text="Log in instead"
                     onClick={() => navigation.goBack()}
                 />
+                <TouchableOpacity
+                    style={{marginTop: 8}}
+                    onPress={() => Linking.openURL (PRIVACY_POLICY_URL)}
+                >
+                    <Text style={styles.text}>
+                        Check out the <Text style={styles.link}>privacy policy</Text> for
+                        more information about how Social Beacon uses your data.
+                    </Text>
+                </TouchableOpacity>
             </ScrollView>
         </View>
     );
@@ -170,5 +181,14 @@ const styles = StyleSheet.create({
         backgroundColor: BG_SECONDARY,
         color: FG_PRIMARY,
     },
+
+    text: {
+        color: FG_SECONDARY,
+    },
+
+    link: {
+        color: FG_PRIMARY,
+        textDecorationLine: 'underline'
+    }
 });
 
