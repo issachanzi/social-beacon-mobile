@@ -8,7 +8,7 @@ import User from '../../model/User';
 import {useNavigation} from '@react-navigation/core';
 import {processLogin} from '../utils/login';
 
-const PRIVACY_POLICY_URL = 'https://beacon.issachanzi.net/privacy';
+const PRIVACY_POLICY_URL = ' ';
 
 export default function CreateAccountPage () {
     const navigation = useNavigation();

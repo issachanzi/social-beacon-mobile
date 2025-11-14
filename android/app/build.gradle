@@ -83,8 +83,8 @@ android {
         applicationId "net.issachanzi.beacon"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1"
     }
     signingConfigs {
         debug {
@@ -92,6 +92,7 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+//             applicationId "net.issachanzi.beacon.dev"
         }
         release {
             storeFile file('issachanzi.keystore')
@@ -124,3 +125,9 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+project.ext.react = [
+    enableHermes: false, // or true if you use Hermes
+    reactNativeDir: file("../node_modules/react-native"),
+    reactNativeVersion: "0.75.4" // <- this ensures Reanimated picks the legacy patch
+]

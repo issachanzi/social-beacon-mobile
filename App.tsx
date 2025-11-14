@@ -24,6 +24,7 @@ import {BG_SYSTEM, BG_PRIMARY} from "./view/Colors";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createStaticNavigation} from "@react-navigation/native";
 import {Alert, Text, View, SafeAreaView} from "react-native";
+import ReportAbusePage from "./view/pages/ReportAbuse";
 
 const SERVER_URL = 'https://api.beacon.issachanzi.net/api';
 
@@ -39,7 +40,8 @@ const Stack = createNativeStackNavigator({
         LoginPage,
         CreateAccountPage,
         SearchFriendPage,
-        SettingsPage
+        SettingsPage,
+        ReportAbusePage
     }
 });
 
