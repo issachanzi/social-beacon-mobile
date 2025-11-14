@@ -9,7 +9,7 @@ import Beacon from "../../model/Beacon";
 import RestEasy from "../../model/RestEasy";
 import {usePoll, usePromise} from "../utils/hooks";
 import {useNavigation} from '@react-navigation/core';
-import {Keyboard, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Keychain from 'react-native-keychain';
 import {FG_SECONDARY} from '../Colors';
 import BiPersonAdd from 'react-native-bootstrap-icons/icons/person-plus';
@@ -21,25 +21,14 @@ import BeaconResponse from '../../model/BeaconResponse';
 import BeaconResponseCard from '../components/BeaconResponseCard';
 import AnimatedViewCollection from '../components/AnimatedViewCollection';
 
-const POLL_INTERVAL_MILLIS = 5_000;
+const POLL_INTERVAL_MILLIS = 10_000;
 
 export default function Home () {
 
     const navigation = useNavigation ();
-    const [isBeaconActive, setIsBeaconActive] = React.useState(false);
 
     const beaconsPromise = usePoll (
-        async () => {
-            const allBeacons = await Beacon.all ();
-            const filter = await Promise.all (
-                allBeacons.map (
-                    async beacon => (await beacon.sender).id !== currentUserId
-                )
-            );
-
-            return allBeacons.filter ((beacon, index) => filter [index]);
-        },
-        POLL_INTERVAL_MILLIS,
+        Beacon.all, POLL_INTERVAL_MILLIS,
         new Promise(resolve => resolve ([])),
         []
     );
@@ -127,7 +116,7 @@ export default function Home () {
     const sendBeacon = () => {
         const beacon = new Beacon ({
             sender: currentUserId,
-            timestamp: selectedTimeRef.current
+            timestamp: selectedTimeRef.current.getTime()
         });
         beacon.save ().then ();
 
@@ -148,24 +137,24 @@ export default function Home () {
             })
         ),
         beacons.map (beacon => ({
-                element: (
-                    <BeaconCard
-                        beacon={beacon}
-                        currentUser={currentUser}
-                        key={beacon.id}
-                    />),
-                key: beacon.id
-            }))
+            element: (
+                <BeaconCard
+                    beacon={beacon}
+                    currentUser={currentUser}
+                    key={beacon.id}
+                />),
+            key: beacon.id
+        }))
     );
 
     return (
         <View>
             <NavBar
                 backButton={false}
-                iconLeft={BiGear}
-                actionLeft={() => navigation.navigate ('SettingsPage')}
                 iconRight={BiPersonAdd}
                 actionRight={() => navigation.navigate ('SearchFriendPage')}
+                iconLeft={BiGear}
+                actionLeft={() => navigation.navigate ('SettingsPage')}
             />
             <ScrollView style={styles.main}>
                 <TimeSelect

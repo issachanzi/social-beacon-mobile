@@ -23,8 +23,9 @@ import SettingsPage from "./view/pages/Settings";
 import {BG_SYSTEM, BG_PRIMARY} from "./view/Colors";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createStaticNavigation} from "@react-navigation/native";
-import {Alert, Text, View, SafeAreaView} from "react-native";
+import {Alert, Text, View} from "react-native";
 import ReportAbusePage from "./view/pages/ReportAbuse";
+import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 
 const SERVER_URL = 'https://api.beacon.issachanzi.net/api';
 
@@ -55,13 +56,20 @@ export default function App(): React.JSX.Element {
         push.setup ();
     }, []);
 
+
     return (
-        <>
-            <SafeAreaView style={{flex: 0, backgroundColor: BG_PRIMARY}} />
-            <SafeAreaView style={{flex: 1, backgroundColor: BG_SYSTEM}}>
+        <SafeAreaProvider>
+            <SafeAreaView
+                edges={['top', 'left', 'right']}
+                style={{flex: 0, backgroundColor: BG_PRIMARY}}
+            />
+            <SafeAreaView
+                edges={['left', 'right', 'bottom']}
+                style={{flex: 1, paddingTop: 0, backgroundColor: BG_SYSTEM}}
+            >
                 <Navigation />
             </SafeAreaView>
-        </>
+        </SafeAreaProvider>
     );
 }
 
