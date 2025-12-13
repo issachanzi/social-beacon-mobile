@@ -8,9 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* SocialBeaconAndroidTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SocialBeaconAndroidTests.m */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5CBCEF5C2EC999EF00BF0F3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBCEF5B2EC999EF00BF0F3B /* AppDelegate.swift */; };
 		5CD35E392D4193C4006DFF10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CD35E382D4193C4006DFF10 /* GoogleService-Info.plist */; };
 		5DAB56921C0E078F2014969E /* Pods_SocialBeaconAndroid_SocialBeaconAndroidTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EE5EA9B549A2E8BAC24368 /* Pods_SocialBeaconAndroid_SocialBeaconAndroidTests.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -34,15 +33,15 @@
 		00E356F21AD99517003FC87E /* SocialBeaconAndroidTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SocialBeaconAndroidTests.m; sourceTree = "<group>"; };
 		0776A79B714841E8D36D9243 /* Pods-SocialBeaconAndroid-SocialBeaconAndroidTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialBeaconAndroid-SocialBeaconAndroidTests.release.xcconfig"; path = "Target Support Files/Pods-SocialBeaconAndroid-SocialBeaconAndroidTests/Pods-SocialBeaconAndroid-SocialBeaconAndroidTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SocialBeaconAndroid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialBeaconAndroid.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SocialBeaconAndroid/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = SocialBeaconAndroid/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SocialBeaconAndroid/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SocialBeaconAndroid/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SocialBeaconAndroid/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = SocialBeaconAndroid/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2DA557AEC92C405CC861A055 /* Pods-SocialBeaconAndroid.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialBeaconAndroid.debug.xcconfig"; path = "Target Support Files/Pods-SocialBeaconAndroid/Pods-SocialBeaconAndroid.debug.xcconfig"; sourceTree = "<group>"; };
 		517011AE4070931A2676DBC2 /* Pods-SocialBeaconAndroid-SocialBeaconAndroidTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialBeaconAndroid-SocialBeaconAndroidTests.debug.xcconfig"; path = "Target Support Files/Pods-SocialBeaconAndroid-SocialBeaconAndroidTests/Pods-SocialBeaconAndroid-SocialBeaconAndroidTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5CBB77812D4DD04A00E02E05 /* SocialBeaconAndroid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SocialBeaconAndroid.entitlements; path = SocialBeaconAndroid/SocialBeaconAndroid.entitlements; sourceTree = "<group>"; };
+		5CBCEF5B2EC999EF00BF0F3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5CBCEF5E2EC9A5C500BF0F3B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5CBCEF5F2EC9A9B100BF0F3B /* SocialBeaconAndroid-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SocialBeaconAndroid-Bridging-Header.h"; sourceTree = "<group>"; };
 		5CD35E382D4193C4006DFF10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SocialBeaconAndroid/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88EE5EA9B549A2E8BAC24368 /* Pods_SocialBeaconAndroid_SocialBeaconAndroidTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SocialBeaconAndroid_SocialBeaconAndroidTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,14 +90,14 @@
 		13B07FAE1A68108700A75B9A /* SocialBeaconAndroid */ = {
 			isa = PBXGroup;
 			children = (
+				5CBCEF5B2EC999EF00BF0F3B /* AppDelegate.swift */,
 				5CBB77812D4DD04A00E02E05 /* SocialBeaconAndroid.entitlements */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
-				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				5CBCEF5E2EC9A5C500BF0F3B /* AppDelegate.h */,
+				5CBCEF5F2EC9A9B100BF0F3B /* SocialBeaconAndroid-Bridging-Header.h */,
 			);
 			name = SocialBeaconAndroid;
 			sourceTree = "<group>";
@@ -215,7 +214,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1620;
 					};
 				};
 			};
@@ -416,8 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				5CBCEF5C2EC999EF00BF0F3B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +505,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.issachanzi.beacon;
 				PRODUCT_NAME = SocialBeaconAndroid;
+				SWIFT_OBJC_BRIDGING_HEADER = "SocialBeaconAndroid-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -536,6 +535,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.issachanzi.beacon;
 				PRODUCT_NAME = SocialBeaconAndroid;
+				SWIFT_OBJC_BRIDGING_HEADER = "SocialBeaconAndroid-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -600,6 +600,8 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers/platform/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -681,6 +683,8 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers/platform/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (

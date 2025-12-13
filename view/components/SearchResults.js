@@ -20,7 +20,8 @@ import {useNavigation} from '@react-navigation/core';
 export default function SearchResults({ results = [], isQueryEmpty = false }) {
   const credentials = usePromise(Keychain.getGenericPassword(), {});
   const currentUserId = credentials.username;
-  const currentUser = usePromise(User.byId(currentUserId), {}, [currentUserId]);
+  const currentUserPromise = User.byId(currentUserId);
+  const currentUser = usePromise(currentUserPromise, {}, [currentUserId]);
   console.log('Current user: ' + JSON.stringify(currentUser));
   const [friendRequestsSent, setFriendRequestsSent] = React.useState([]);
   React.useEffect(() => {
