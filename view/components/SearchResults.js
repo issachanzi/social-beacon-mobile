@@ -22,6 +22,7 @@ export default function SearchResults({ results = [], isQueryEmpty = false }) {
   const currentUserId = credentials.username;
   const currentUserPromise = User.byId(currentUserId);
   const currentUser = usePromise(currentUserPromise, {}, [currentUserId]);
+  console.log('currentUserId: ', currentUserId);
   console.log('Current user: ' + JSON.stringify(currentUser));
   const [friendRequestsSent, setFriendRequestsSent] = React.useState([]);
   React.useEffect(() => {
@@ -79,10 +80,10 @@ function AddFriendButton({
   item,
   currentUser,
 }) {
-  const handleSendFriendRequest = user => {
+  const handleSendFriendRequest = () => {
     const friendRequest = new FriendRequest({
       from: currentUser.id,
-      to: user.id,
+      to: item.id,
     });
 
     friendRequest.save().then(noOp => {});
@@ -90,16 +91,16 @@ function AddFriendButton({
     setFriendRequestsSent(oldValue => {
       const newValue = { ...oldValue };
 
-      newValue[user.id] = true;
+      newValue[item.id] = true;
 
       return newValue;
     });
   };
 
-  const handleDeleteFriendRequest = user => {
+  const handleDeleteFriendRequest = () => {
     FriendRequest.where({
       from: currentUser.id,
-      to: user.id,
+      to: item.id,
     }).then(friendRequests => {
       friendRequests.forEach(fr => {
         fr.destroy();
@@ -109,7 +110,7 @@ function AddFriendButton({
     setFriendRequestsSent(oldValue => {
       const newValue = { ...oldValue };
 
-      newValue[user.id] = false;
+      newValue[item.id] = false;
 
       return newValue;
     });
