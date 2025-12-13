@@ -13,6 +13,10 @@ import User from '../../model/User';
 export default function Settings () {
     const navigation = useNavigation();
 
+    const tutorial = () => {
+        navigation.navigate('TutorialPage');
+    }
+
     const logOut = () => {
         Keychain.resetGenericPassword ().then ();
 
@@ -55,6 +59,7 @@ export default function Settings () {
             <View style={styles.main}>
                 <Button text="Log out" onClick={logOut} />
                 <Button text="Delete account" onClick={deleteAccount} />
+                <Button text="Tutorial" onClick={tutorial} />
             </View>
         </View>
     );

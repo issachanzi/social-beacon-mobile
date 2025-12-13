@@ -8,7 +8,12 @@ import BiHeartFill from 'react-native-bootstrap-icons/icons/heart-fill';
 import {BG_PRIMARY, BG_SECONDARY, FG_PRIMARY, FG_SECONDARY} from '../Colors';
 import BeaconResponse from '../../model/BeaconResponse';
 
-export default function BeaconCard ({ beacon, currentUser, style }) {
+export default function BeaconCard ({
+    beacon,
+    currentUser,
+    style,
+    onHeart = undefined
+}) {
     const sender = usePromise (beacon.sender);
 
     const [responses, setResponses] = React.useState ([]);
@@ -19,7 +24,11 @@ export default function BeaconCard ({ beacon, currentUser, style }) {
     }, []);
 
     const toggleResponse = () => {
-        if (isResponded) {
+        if (onHeart) {
+            setResponses(r => r.length === 0 && [null] || []);
+            onHeart();
+        }
+        else if (isResponded) {
             responses.forEach (response => response.destroy ());
 
             setResponses([]);
@@ -34,7 +43,7 @@ export default function BeaconCard ({ beacon, currentUser, style }) {
 
             setResponses([response]);
         }
-    }
+    };
 
     if (sender == null) {
         return <></>;

@@ -11,7 +11,7 @@ const STATE_REMOVE_FINISHED = 4;
 
 const ANIMATION_DURATION_MILLIS = 300;
 
-export default function AnimatedViewCollection ({ items }) {
+export default function AnimatedViewCollection ({ items, slide = true }) {
     const [currentItems, setCurrentItems] = useState([]);
 
     React.useEffect(() => {
@@ -32,13 +32,14 @@ export default function AnimatedViewCollection ({ items }) {
                     state: i.id === item.id ? newState : i.state
                 }))
             )}
+            slide={slide}
         >
             {item.element}
         </AnimatedViewEntry>
     )));
 }
 
-function AnimatedViewEntry ({state, children, onChangeState}) {
+function AnimatedViewEntry ({state, children, onChangeState, slide = true}) {
     const [layoutHeight, setLayoutHeight] = useState(0);
     const [currentState, setCurrentState] = useState(state);
 
@@ -108,7 +109,7 @@ function AnimatedViewEntry ({state, children, onChangeState}) {
     const windowWidth = Dimensions.get('window').width;
 
     const style = Rnra.useAnimatedStyle (() => ({
-        transform: [
+        transform: slide && [
             {
                 translateX: Rnra.interpolate (
                     slideAnim.value,
@@ -116,7 +117,7 @@ function AnimatedViewEntry ({state, children, onChangeState}) {
                     [0, windowWidth]
                 )
             }
-        ],
+        ] || [],
         opacity: Rnra.interpolate(
             slideAnim.value,
             [-1, 0, 1],

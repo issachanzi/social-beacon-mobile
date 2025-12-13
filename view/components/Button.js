@@ -32,6 +32,10 @@ export default function Button ({
         isPrimary ? styles.primary : styles.secondary
     );
 
+    const fgStyle = StyleSheet.compose (
+        isPrimary ? styles.primaryFg : styles.secondaryFg
+    );
+
     const highlightAnimSv = useHighlight();
     const highlightStyle = Rnra.useAnimatedStyle (
         () => ({
@@ -41,7 +45,7 @@ export default function Button ({
     );
 
     const buttonStyle = [styles.button, primaryStyle, style, highlightStyle];
-    const textStyle = [styles.text, primaryStyle];
+    const textStyle = [styles.text, fgStyle];
 
     return (
         <TouchableOpacity onPress={onClick}>
@@ -78,12 +82,18 @@ const styles = StyleSheet.create ({
     },
 
     primary: {
-        backgroundColor: BG_PRIMARY,
-        color: FG_PRIMARY
+        backgroundColor: BG_PRIMARY
     },
 
     secondary: {
-        backgroundColor: BG_SECONDARY,
+        backgroundColor: BG_SECONDARY
+    },
+
+    primaryFg: {
+        color: FG_PRIMARY
+    },
+
+    secondaryFg: {
         color: FG_SECONDARY
     },
 

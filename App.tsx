@@ -26,6 +26,7 @@ import {createStaticNavigation} from "@react-navigation/native";
 import {Alert, Text, View} from "react-native";
 import ReportAbusePage from "./view/pages/ReportAbuse";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
+import TutorialPage from "./view/pages/Tutorial";
 
 const SERVER_URL = 'https://api.beacon.issachanzi.net/api';
 
@@ -42,7 +43,8 @@ const Stack = createNativeStackNavigator({
         CreateAccountPage,
         SearchFriendPage,
         SettingsPage,
-        ReportAbusePage
+        ReportAbusePage,
+        TutorialPage,
     }
 });
 
