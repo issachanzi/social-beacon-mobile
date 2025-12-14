@@ -3,11 +3,14 @@ import {FG_HIGHIGHT, FG_PRIMARY} from '../Colors';
 import * as Rnra from 'react-native-reanimated';
 import {withTiming} from 'react-native-reanimated';
 
-export function usePromise (promise, defaultValue = null, deps = []) {
+export function usePromise (promise, defaultValue = null, deps = [], debug = false) {
     const [state, setState] = React.useState(defaultValue);
+    React.useDebugValue(state);
     React.useEffect(() => {
         if (promise !== undefined && promise !== null) {
-            promise.then (setState).catch (err => {
+            promise.then (result => {
+                setState(result);
+            }).catch (err => {
                 console.log (err);
             });
         }
